@@ -24,6 +24,14 @@ var (
 //
 
 func testReconsileEventsSetup() error {
+	// clear
+
+	if err := events.Clear(); err != nil {
+		return err
+	}
+
+	// setup
+
 	timestamp := time.Now()
 
 	options := &events.AppendOptions{
