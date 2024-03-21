@@ -29,6 +29,16 @@ func TestAppendEvent(t *testing.T) {
 				Timestamp:  utils.Ref(time.Now()),
 			},
 		},
+		{
+			Expected: nil,
+			Event: &events.Event{
+				AircraftID: "aircraftID",
+				Latitude:   0,
+				Longitude:  0,
+				StationID:  "stationID",
+				Timestamp:  utils.Ref(time.Now()),
+			},
+		},
 	}
 
 	for _, test := range tests {
