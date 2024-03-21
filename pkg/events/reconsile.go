@@ -2,7 +2,7 @@ package events
 
 import "fmt"
 
-func ReconsileEvents(aircraftID string) ([]*Event, error) {
+func Reconsile(aircraftID string) ([]*Event, error) {
 	// get events by aircraftID
 
 	data := Index[aircraftID]

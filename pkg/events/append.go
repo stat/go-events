@@ -5,8 +5,8 @@ package events
 //
 
 const (
-	DefaultReconsileEvents     = true
-	DefaultReconsilationWindow = 2
+	DefaultAppendReconsileEvents     = true
+	DefaultAppendReconsilationWindow = 2
 )
 
 type AppendOptions struct {
@@ -16,16 +16,16 @@ type AppendOptions struct {
 
 func AppendOptionsDefaults() *AppendOptions {
 	return &AppendOptions{
-		ReconsileEvents:     DefaultReconsileEvents,
-		ReconsilationWindow: DefaultReconsilationWindow,
+		ReconsileEvents:     DefaultAppendReconsileEvents,
+		ReconsilationWindow: DefaultAppendReconsilationWindow,
 	}
 }
 
-func AppendEvent(payload *Event) error {
-	return AppendEventWithOptions(payload, AppendOptionsDefaults())
+func Append(payload *Event) error {
+	return AppendWithOptions(payload, AppendOptionsDefaults())
 }
 
-func AppendEventWithOptions(payload *Event, options *AppendOptions) error {
+func AppendWithOptions(payload *Event, options *AppendOptions) error {
 	aircraftID := payload.AircraftID
 
 	// sanity check
@@ -49,7 +49,7 @@ func AppendEventWithOptions(payload *Event, options *AppendOptions) error {
 	// check to see if we need to reconsile
 
 	if options.ReconsileEvents == true && len(data) > options.ReconsilationWindow {
-		events, err := ReconsileEvents(aircraftID)
+		events, err := Reconsile(aircraftID)
 
 		if err != nil {
 			return err
@@ -59,7 +59,7 @@ func AppendEventWithOptions(payload *Event, options *AppendOptions) error {
 
 		data = []*Event{}
 
-		err = storeEvents(events)
+		err = SinkEvents(events)
 
 		if err != nil {
 			return err

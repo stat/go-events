@@ -34,7 +34,7 @@ func TestAppendEvent(t *testing.T) {
 	for _, test := range tests {
 		payload := test.Event
 
-		result := events.AppendEvent(payload)
+		result := events.Append(payload)
 		assert.Equal(t, test.Expected, result)
 
 		// if not success, then contiue

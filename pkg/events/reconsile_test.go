@@ -30,7 +30,7 @@ func testReconsileEventsSetup() error {
 		ReconsileEvents: false,
 	}
 
-	events.AppendEventWithOptions(&events.Event{
+	events.AppendWithOptions(&events.Event{
 		AircraftID: TestReconsileEventsAircraftID,
 		StationID:  TestReconsileEventsStationID,
 		Latitude:   1,
@@ -38,7 +38,7 @@ func testReconsileEventsSetup() error {
 		Timestamp:  &timestamp,
 	}, options)
 
-	events.AppendEventWithOptions(&events.Event{
+	events.AppendWithOptions(&events.Event{
 		AircraftID: TestReconsileEventsAircraftID,
 		StationID:  TestReconsileEventsStationID,
 		Latitude:   1,
@@ -70,7 +70,7 @@ func TestReconsileEvents(t *testing.T) {
 
 	// reconsile
 
-	events, err := events.ReconsileEvents(TestReconsileEventsAircraftID)
+	events, err := events.Reconsile(TestReconsileEventsAircraftID)
 
 	require.Nil(t, err)
 	assert.Equal(t, 1, len(events))
