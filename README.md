@@ -1,2 +1,7 @@
+###Testing
+```
+make test
+```
+
 TODO
-* fill out this readme
+* continue adding to this readme
