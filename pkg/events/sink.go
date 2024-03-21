@@ -1,5 +1,7 @@
 package events
 
-func storeEvents(events []*Event) error {
+type StoreOptions interface{}
+
+func StoreEvents(events []*Event, options ...*StoreOptions) error {
 	return nil
 }

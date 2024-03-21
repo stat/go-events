@@ -1,7 +1,7 @@
 package events
 
-type TapOptions struct{}
+type TapOptions interface{}
 
-func tapEvents(options ...*TapOptions) ([]*Event, error) {
+func TapEvents(options ...*TapOptions) ([]*Event, error) {
 	return nil, nil
 }
