@@ -8,5 +8,6 @@ make test
 
 TODO
 * implement better reconsiliation algos
+* implement channels
 * add go function header documentation
 * continue adding to this readme
