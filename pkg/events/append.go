@@ -31,15 +31,15 @@ func AppendWithOptions(payload *Event, options *AppendOptions) error {
 	// sanity check
 
 	if aircraftID == "" {
-		return AppendEventAircraftIDEmptyError
+		return AppendAircraftIDEmptyError
 	}
 
 	if payload.StationID == "" {
-		return AppendEventStationIDEmptyError
+		return AppendStationIDEmptyError
 	}
 
 	if payload.Timestamp == nil {
-		return AppendEventTimestampEmptyError
+		return AppendTimestampEmptyError
 	}
 
 	// append
@@ -59,7 +59,7 @@ func AppendWithOptions(payload *Event, options *AppendOptions) error {
 
 		data = []*Event{}
 
-		err = SinkEvents(events)
+		err = Sink(events)
 
 		if err != nil {
 			return err

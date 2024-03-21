@@ -20,7 +20,7 @@ func TestAppendEvent(t *testing.T) {
 		Expected error
 	}{
 		{
-			Expected: events.AppendEventAircraftIDEmptyError,
+			Expected: events.AppendAircraftIDEmptyError,
 			Event: &events.Event{
 				AircraftID: "",
 				Latitude:   0,
