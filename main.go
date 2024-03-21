@@ -1,17 +1,28 @@
 package grid
 
 import (
+	"errors"
 	"fmt"
 	"time"
 )
+
+//
+// Consts
+//
 
 const (
 	ReconsilationWindow = 2
 )
 
+//
+// Vars
+//
+
 var (
 	// errors
-	AppendEventAircraftIDError = fmt.Errorf("must include aircraft id!")
+	AppendEventAircraftIDEmptyError = errors.New("must include aircraft id!")
+	AppendEventStationIDEmptyError  = errors.New("must include station id!")
+	AppendEventTimestampEmptyError  = errors.New("must include timestamp!")
 
 	// event buffer indexed by aircraftID
 	Index map[string][]*Event = make(map[string][]*Event)
@@ -31,15 +42,15 @@ func AppendEvent(payload *Event, reconsileEvents bool) error {
 	// sanity check
 
 	if aircraftID == "" {
-		return AppendEventAircraftIDError
+		return AppendEventAircraftIDEmptyError
 	}
 
 	if payload.StationID == "" {
-		return fmt.Errorf("must include station id!")
+		return AppendEventStationIDEmptyError
 	}
 
 	if payload.Timestamp == nil {
-		return fmt.Errorf("must include timestamp!")
+		return AppendEventTimestampEmptyError
 	}
 
 	// append
@@ -56,6 +67,7 @@ func AppendEvent(payload *Event, reconsileEvents bool) error {
 		}
 
 		// flush
+
 		data = []*Event{}
 
 		err = storeEvents(events)
@@ -75,45 +87,77 @@ func AppendEvent(payload *Event, reconsileEvents bool) error {
 	return nil
 }
 
-// returns list of reconsiled events
 func ReconsileEvents(aircraftID string) ([]*Event, error) {
-	// get all data for aircraftid window
+	// get events by aircraftID
 
 	data := Index[aircraftID]
+
+	// ensure data
 
 	if data == nil {
 		return nil, fmt.Errorf("no data available for %s", aircraftID)
 	}
 
-	events := []*Event{}
+	// initialize reconsiled events
 
-	var last *Event = nil
+	reconsiledEvents := []*Event{}
+
+	var event *Event = nil
 	for _, item := range data {
-		if isEventEqual(last, item) {
+		// determine if equal, then resume
+		if isEventEqual(event, item) {
 			continue
 		}
 
-		events = append(events, item)
-		last = item
+		// append
+
+		reconsiledEvents = append(reconsiledEvents, item)
+
+		// rotate
+
+		event = item
 	}
 
-	return events, nil
+	// success
+
+	return reconsiledEvents, nil
 }
 
 func isEventEqual(e1, e2 *Event) bool {
+	// sanity check
+
 	if e1 == nil || e2 == nil {
 		return false
 	}
 
-	return isTimeEqual(e1.Timestamp, e2.Timestamp)
+	// compute
+	// TODO: implmenet additional comp algos
+
+	result :=
+		isTimeEqual(e1.Timestamp, e2.Timestamp)
+
+	// success
+
+	return result
 }
+
 func isTimeEqual(t1, t2 *time.Time) bool {
+	// sanity check
+
 	if t1 == nil || t2 == nil {
 		return false
 	}
 
-	return t1.Sub(*t2) == 0
+	// compute
+	// TODO: implmenet theshold algo
+
+	result := t1.Sub(*t2) == 0
+
+	// success
+
+	return result
 }
+
 func storeEvents(events []*Event) error {
 	return nil
 }
