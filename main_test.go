@@ -51,12 +51,12 @@ func Ref[T any](v T) *T {
 
 func TestAppendEvent(t *testing.T) {
 	tests := []struct {
-		Payload  *grid.Payload
+		Event    *grid.Event
 		Expected error
 	}{
 		{
 			Expected: grid.AppendEventAircraftIDError,
-			Payload: &grid.Payload{
+			Event: &grid.Event{
 				AircraftID: "",
 				Latitude:   0,
 				Longitude:  0,
@@ -67,7 +67,7 @@ func TestAppendEvent(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		payload := test.Payload
+		payload := test.Event
 
 		result := grid.AppendEvent(payload, true)
 		assert.Equal(t, test.Expected, result)
@@ -90,7 +90,7 @@ func TestReconsileEvents(t *testing.T) {
 
 	timestamp := time.Now()
 
-	grid.AppendEvent(&grid.Payload{
+	grid.AppendEvent(&grid.Event{
 		AircraftID: aircraftID,
 		Latitude:   1,
 		Longitude:  1,
@@ -98,7 +98,7 @@ func TestReconsileEvents(t *testing.T) {
 		Timestamp:  &timestamp,
 	}, false)
 
-	grid.AppendEvent(&grid.Payload{
+	grid.AppendEvent(&grid.Event{
 		AircraftID: aircraftID,
 		Latitude:   1,
 		Longitude:  1,

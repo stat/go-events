@@ -10,11 +10,14 @@ const (
 )
 
 var (
-	Index                      map[string][]*Payload = make(map[string][]*Payload)
-	AppendEventAircraftIDError                       = fmt.Errorf("must include aircraft id!")
+	// errors
+	AppendEventAircraftIDError = fmt.Errorf("must include aircraft id!")
+
+	// event buffer indexed by aircraftID
+	Index map[string][]*Event = make(map[string][]*Event)
 )
 
-type Payload struct {
+type Event struct {
 	AircraftID string
 	Latitude   float64
 	Longitude  float64
@@ -22,18 +25,11 @@ type Payload struct {
 	Timestamp  *time.Time
 }
 
-func main() {
-	fmt.Println("hello, world")
-
-	// append events
-}
-
-func AppendEvent(payload *Payload, reconsileEvents bool) error {
+func AppendEvent(payload *Event, reconsileEvents bool) error {
 	aircraftID := payload.AircraftID
 
 	// sanity check
 
-	fmt.Println(payload)
 	if aircraftID == "" {
 		return AppendEventAircraftIDError
 	}
@@ -60,7 +56,7 @@ func AppendEvent(payload *Payload, reconsileEvents bool) error {
 		}
 
 		// flush
-		data = []*Payload{}
+		data = []*Event{}
 
 		err = storeEvents(events)
 
@@ -80,7 +76,7 @@ func AppendEvent(payload *Payload, reconsileEvents bool) error {
 }
 
 // returns list of reconsiled events
-func ReconsileEvents(aircraftID string) ([]*Payload, error) {
+func ReconsileEvents(aircraftID string) ([]*Event, error) {
 	// get all data for aircraftid window
 
 	data := Index[aircraftID]
@@ -89,9 +85,9 @@ func ReconsileEvents(aircraftID string) ([]*Payload, error) {
 		return nil, fmt.Errorf("no data available for %s", aircraftID)
 	}
 
-	events := []*Payload{}
+	events := []*Event{}
 
-	var last *Payload = nil
+	var last *Event = nil
 	for _, item := range data {
 		if isEventEqual(last, item) {
 			continue
@@ -104,7 +100,7 @@ func ReconsileEvents(aircraftID string) ([]*Payload, error) {
 	return events, nil
 }
 
-func isEventEqual(e1, e2 *Payload) bool {
+func isEventEqual(e1, e2 *Event) bool {
 	if e1 == nil || e2 == nil {
 		return false
 	}
@@ -118,6 +114,6 @@ func isTimeEqual(t1, t2 *time.Time) bool {
 
 	return t1.Sub(*t2) == 0
 }
-func storeEvents(events []*Payload) error {
+func storeEvents(events []*Event) error {
 	return nil
 }
