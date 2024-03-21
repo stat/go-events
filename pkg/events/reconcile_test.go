@@ -15,15 +15,15 @@ import (
 //
 
 var (
-	TestReconsileEventsAircraftID = "aircraftID"
-	TestReconsileEventsStationID  = "stationID"
+	TestReconcileEventsAircraftID = "aircraftID"
+	TestReconcileEventsStationID  = "stationID"
 )
 
 //
 // Setup
 //
 
-func testReconsileEventsSetup() error {
+func testReconcileEventsSetup() error {
 	// clear
 
 	if err := events.Clear(); err != nil {
@@ -35,20 +35,20 @@ func testReconsileEventsSetup() error {
 	timestamp := time.Now()
 
 	options := &events.AppendOptions{
-		ReconsileEvents: false,
+		ReconcileEvents: false,
 	}
 
 	events.AppendWithOptions(&events.Event{
-		AircraftID: TestReconsileEventsAircraftID,
-		StationID:  TestReconsileEventsStationID,
+		AircraftID: TestReconcileEventsAircraftID,
+		StationID:  TestReconcileEventsStationID,
 		Latitude:   1,
 		Longitude:  1,
 		Timestamp:  &timestamp,
 	}, options)
 
 	events.AppendWithOptions(&events.Event{
-		AircraftID: TestReconsileEventsAircraftID,
-		StationID:  TestReconsileEventsStationID,
+		AircraftID: TestReconcileEventsAircraftID,
+		StationID:  TestReconcileEventsStationID,
 		Latitude:   1,
 		Longitude:  1,
 		Timestamp:  &timestamp,
@@ -61,7 +61,7 @@ func testReconsileEventsSetup() error {
 // Teardown
 //
 
-func testReconsileEventsTeardown() error {
+func testReconcileEventsTeardown() error {
 	return events.Clear()
 }
 
@@ -69,23 +69,23 @@ func testReconsileEventsTeardown() error {
 // Test
 //
 
-func TestReconsileEvents(t *testing.T) {
+func TestReconcileEvents(t *testing.T) {
 	// setup
 
-	if err := testReconsileEventsSetup(); err != nil {
+	if err := testReconcileEventsSetup(); err != nil {
 		panic(err)
 	}
 
-	// reconsile
+	// reconcile
 
-	events, err := events.Reconsile(TestReconsileEventsAircraftID)
+	events, err := events.Reconcile(TestReconcileEventsAircraftID)
 
 	require.Nil(t, err)
 	assert.Equal(t, 1, len(events))
 
 	// teardown
 
-	if err := testReconsileEventsTeardown(); err != nil {
+	if err := testReconcileEventsTeardown(); err != nil {
 		panic(err)
 	}
 

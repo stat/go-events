@@ -2,7 +2,7 @@ package events
 
 import "fmt"
 
-func Reconsile(aircraftID string) ([]*Event, error) {
+func Reconcile(aircraftID string) ([]*Event, error) {
 	// get events by aircraftID
 
 	data := Index[aircraftID]
@@ -13,9 +13,9 @@ func Reconsile(aircraftID string) ([]*Event, error) {
 		return nil, fmt.Errorf("no data available for %s", aircraftID)
 	}
 
-	// initialize reconsiled events
+	// initialize reconciled events
 
-	reconsiledEvents := []*Event{}
+	reconciledEvents := []*Event{}
 
 	var event *Event = nil
 	for _, item := range data {
@@ -26,7 +26,7 @@ func Reconsile(aircraftID string) ([]*Event, error) {
 
 		// append
 
-		reconsiledEvents = append(reconsiledEvents, item)
+		reconciledEvents = append(reconciledEvents, item)
 
 		// rotate
 
@@ -35,5 +35,5 @@ func Reconsile(aircraftID string) ([]*Event, error) {
 
 	// success
 
-	return reconsiledEvents, nil
+	return reconciledEvents, nil
 }
