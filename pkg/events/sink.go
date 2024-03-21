@@ -1,7 +1,7 @@
 package events
 
-type StoreOptions interface{}
+type SinkOptions interface{}
 
-func StoreEvents(events []*Event, options ...*StoreOptions) error {
+func SinkEvents(events []*Event, options ...*SinkOptions) error {
 	return nil
 }
