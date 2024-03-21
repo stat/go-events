@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"grid"
+	"grid/pkg/utils"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -30,22 +31,6 @@ func teardown() {
 }
 
 //
-// Utilities
-//
-
-func Must[T any](t T, err error) T {
-	if err != nil {
-		panic(err)
-	}
-
-	return t
-}
-
-func Ref[T any](v T) *T {
-	return &v
-}
-
-//
 // Tests
 //
 
@@ -55,13 +40,13 @@ func TestAppendEvent(t *testing.T) {
 		Expected error
 	}{
 		{
-			Expected: grid.AppendEventAircraftIDError,
+			Expected: grid.AppendEventAircraftIDEmptyError,
 			Event: &grid.Event{
 				AircraftID: "",
 				Latitude:   0,
 				Longitude:  0,
 				StationID:  "stationID",
-				Timestamp:  Ref(time.Now()),
+				Timestamp:  utils.Ref(time.Now()),
 			},
 		},
 	}
