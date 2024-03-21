@@ -8,6 +8,7 @@ import (
 	"grid/pkg/utils"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 //
@@ -15,6 +16,12 @@ import (
 //
 
 func TestAppendEvent(t *testing.T) {
+	// clear
+
+	require.Nil(t, events.Clear())
+
+	// tests
+
 	tests := []struct {
 		Event    *events.Event
 		Expected error
