@@ -1,7 +1,7 @@
 GO					= go
 GO_BUILD		= $(GO) build
 GO_CLEAN		= $(GO) clean
-GO_TEST			= $(GO) test
+GO_TEST			= $(GO) clean -testcache; $(GO) test
 GO_GET			= $(GO) get
 
 SRC					:= $(shell find . -type f -name '*.go' -not -path "./vendor/*")
