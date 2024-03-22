@@ -1,6 +1,9 @@
 package events
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 func Reconcile(aircraftID string) ([]*Event, error) {
 	// get events by aircraftID
@@ -12,6 +15,12 @@ func Reconcile(aircraftID string) ([]*Event, error) {
 	if data == nil {
 		return nil, fmt.Errorf("no data available for %s", aircraftID)
 	}
+
+	// sort by timestamp
+
+	sort.SliceStable(data, func(i, j int) bool {
+		return data[i].Timestamp.Before(*data[j].Timestamp)
+	})
 
 	// initialize reconciled events
 
