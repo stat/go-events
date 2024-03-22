@@ -22,7 +22,7 @@ LDFLAGS			= -X=$(TARGET)/pkg/version.Build=$(BUILD) \
 							-X=$(TARGET)/pkg/version.Patch=$(PATCH) \
 							-X=$(TARGET)/pkg/version.String=${MAJOR}.${MINOR}.${PATCH}
 
-RELEASEFLAGS := GOOS=linux GOARCH=arm64 CGO_ENABLED=0
+RELEASEFLAGS := GOOS=linux GOARCH=amd64 CGO_ENABLED=0
 
 .DEFAULT_GOAL := help
 
