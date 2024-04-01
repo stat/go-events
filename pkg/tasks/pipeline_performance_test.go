@@ -19,6 +19,7 @@ import (
 )
 
 // TODO: refactor me
+// TODO: add fuzzing to force an error count with bad data
 
 func TestPipelinePerformance(t *testing.T) {
 	maxAircrafts := int(1e4)
