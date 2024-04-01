@@ -34,11 +34,11 @@ func (backend Redis) Initialize(vars *env.Vars) (provider.Provider, error) {
 	return concrete, nil
 }
 
-func (backend Redis) GetAircraftLocation() (*models.ADSB, error) {
+func (backend Redis) GetAircraftLocation() (*models.LocationEvent, error) {
 	return nil, nil
 }
 
-func (backend Redis) GetAircraftsLocations(key string) (map[string]*models.ADSB, error) {
+func (backend Redis) GetAircraftsLocations(key string) (map[string]*models.LocationEvent, error) {
 	return nil, nil
 }
 

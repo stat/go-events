@@ -11,14 +11,14 @@ import (
 )
 
 type Payload struct {
-	*models.ADSB
+	*models.LocationEvent
 }
 
 const (
 	Type = "producer"
 )
 
-func Process(event *models.ADSB) error {
+func Process(event *models.LocationEvent) error {
 	// key
 
 	key := event.AircraftID
@@ -57,14 +57,14 @@ func (processor *Payload) ProcessTask(ctx context.Context, t *asynq.Task) error 
 		return err
 	}
 
-	if err := Process(payload.ADSB); err != nil {
+	if err := Process(payload.LocationEvent); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func NewTask(event *models.ADSB) (*asynq.Task, error) {
+func NewTask(event *models.LocationEvent) (*asynq.Task, error) {
 	payload, err := json.Marshal(event)
 
 	if err != nil {

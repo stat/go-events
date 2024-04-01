@@ -15,7 +15,7 @@ import (
 )
 
 type Payload struct {
-	*models.ADSB
+	*models.LocationEvent
 }
 
 const (
@@ -29,7 +29,7 @@ var (
 	ProcessEventTimestampEqualError  = errors.New("event timestamp is the same as the current entry")
 )
 
-func Process(event *models.ADSB) error {
+func Process(event *models.LocationEvent) error {
 	// TODO: func sanity check
 
 	// sanity check
@@ -100,7 +100,7 @@ func (processor *Payload) ProcessTask(ctx context.Context, t *asynq.Task) error 
 		return err
 	}
 
-	event := payload.ADSB
+	event := payload.LocationEvent
 
 	// process
 
@@ -124,7 +124,7 @@ func (processor *Payload) ProcessTask(ctx context.Context, t *asynq.Task) error 
 	return nil
 }
 
-func (processor *Payload) Choreograph(event *models.ADSB) error {
+func (processor *Payload) Choreograph(event *models.LocationEvent) error {
 	// enqueue producer
 
 	next, err := producer.NewTask(event)
@@ -148,7 +148,7 @@ func (processor *Payload) Choreograph(event *models.ADSB) error {
 	return nil
 }
 
-func NewTask(event *models.ADSB) (*asynq.Task, error) {
+func NewTask(event *models.LocationEvent) (*asynq.Task, error) {
 	payload, err := json.Marshal(event)
 
 	if err != nil {

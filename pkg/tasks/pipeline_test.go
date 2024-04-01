@@ -21,11 +21,11 @@ func TestPipeline(t *testing.T) {
 	start := time.Now()
 
 	tests := []struct {
-		Event    *models.ADSB
+		Event    *models.LocationEvent
 		Expected error
 	}{
 		{
-			Event: &models.ADSB{
+			Event: &models.LocationEvent{
 				AircraftID: aircraftID,
 				Latitude:   1.0,
 				Longitude:  1.0,
@@ -35,7 +35,7 @@ func TestPipeline(t *testing.T) {
 			Expected: nil,
 		},
 		{
-			Event: &models.ADSB{
+			Event: &models.LocationEvent{
 				AircraftID: aircraftID,
 				Latitude:   1.0,
 				Longitude:  1.0,
@@ -45,7 +45,7 @@ func TestPipeline(t *testing.T) {
 			Expected: consumer.ProcessEventTimestampEqualError,
 		},
 		{
-			Event: &models.ADSB{
+			Event: &models.LocationEvent{
 				AircraftID: aircraftID,
 				Latitude:   1.0,
 				Longitude:  1.0,
@@ -55,7 +55,7 @@ func TestPipeline(t *testing.T) {
 			Expected: consumer.ProcessEventTimestampAfterError,
 		},
 		{
-			Event: &models.ADSB{
+			Event: &models.LocationEvent{
 				AircraftID: aircraftID,
 				Latitude:   1.0,
 				Longitude:  1.0,
@@ -65,7 +65,7 @@ func TestPipeline(t *testing.T) {
 			Expected: consumer.ProcessEventTimestampBeforeError,
 		},
 		{
-			Event: &models.ADSB{
+			Event: &models.LocationEvent{
 				AircraftID: aircraftID,
 				Latitude:   1.0,
 				Longitude:  1.0,

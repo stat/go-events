@@ -47,7 +47,7 @@ func TestPipelinePerformance(t *testing.T) {
 				aircraftID := fmt.Sprintf("aircraft-%d", rand.Intn(maxAircrafts)+1)
 				stationID := fmt.Sprintf("station-%d", rand.Intn(maxStations)+1)
 
-				event := &models.ADSB{
+				event := &models.LocationEvent{
 					AircraftID: aircraftID,
 					Latitude:   1.0,
 					Longitude:  1.0,

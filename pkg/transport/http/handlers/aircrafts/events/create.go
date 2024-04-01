@@ -14,7 +14,7 @@ import (
 func Create(c *gin.Context) {
 	// bind JSON body
 
-	event := &models.ADSB{}
+	event := &models.LocationEvent{}
 
 	if err := c.ShouldBindJSON(event); err != nil {
 		respond.WithError(c, http.StatusBadRequest, err)

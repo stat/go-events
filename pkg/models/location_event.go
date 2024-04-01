@@ -8,7 +8,7 @@ import (
 // for additional ADS-B tranmission fields:
 // https://www.flightradar24.com/blog/ads-b/#:~:text=ADS%2DB%20In%20Reception%3A%20ADS,%2C%20speed%2C%20and%20other%20information.
 
-type ADSB struct {
+type LocationEvent struct {
 	AircraftID string     `json:"aircraftID" validate:"required"`
 	Latitude   float64    `json:"latitude" validate:"latitude"`
 	Longitude  float64    `json:"longitude" validate:"longitude"`
@@ -17,14 +17,14 @@ type ADSB struct {
 }
 
 var (
-	ADSBValidateAircraftIDError = errors.New("ADSB event aircarft id validation error")
-	ADSBValidateLatitudeError   = errors.New("ADSB event latitude validation error")
-	ADSBValidateLongitudeError  = errors.New("ADSB event longitude validation error")
-	ADSBValidateStationIDError  = errors.New("ADSB event station id validation error")
-	ADSBValidateTimestampError  = errors.New("ADSB event timestamp validation error")
+	ADSBValidateAircraftIDError = errors.New("Location event aircarft id validation error")
+	ADSBValidateLatitudeError   = errors.New("Location event latitude validation error")
+	ADSBValidateLongitudeError  = errors.New("Location event longitude validation error")
+	ADSBValidateStationIDError  = errors.New("Location event station id validation error")
+	ADSBValidateTimestampError  = errors.New("Location event timestamp validation error")
 )
 
-func (event *ADSB) Validate() error {
+func (event *LocationEvent) Validate() error {
 	if event.AircraftID == "" {
 		return ADSBValidateAircraftIDError
 	}

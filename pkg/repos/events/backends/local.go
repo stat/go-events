@@ -25,7 +25,7 @@ package events_backends
 //   return nil
 // }
 
-// func getEventAtIndexLocal(key string, index int64) (*models.ADSB, error) {
+// func getEventAtIndexLocal(key string, index int64) (*models.LocationEvent, error) {
 //   l, ok := local[key]
 
 //   if !ok {
@@ -44,7 +44,7 @@ package events_backends
 //     return nil, fmt.Errorf("cannot cast to []byte")
 //   }
 
-//   event := &models.ADSB{}
+//   event := &models.LocationEvent{}
 
 //   // unmarshal
 
@@ -59,11 +59,11 @@ package events_backends
 //   return event, err
 // }
 
-// func getHeadEventLocal(key string) (*models.ADSB, error) {
+// func getHeadEventLocal(key string) (*models.LocationEvent, error) {
 //   return getEventAtIndexLocal(key, 0)
 // }
 
-// func getTailEventLocal(key string) (*models.ADSB, error) {
+// func getTailEventLocal(key string) (*models.LocationEvent, error) {
 //   return getEventAtIndexLocal(key, 0)
 // }
 

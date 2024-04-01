@@ -55,11 +55,11 @@ func (backend Redis) DelTail(key string) error {
 	return nil
 }
 
-func (backend Redis) Get(key string) (*models.ADSB, error) {
+func (backend Redis) Get(key string) (*models.LocationEvent, error) {
 	return nil, nil
 }
 
-func (backend Redis) GetAtIndex(key string, index int64) (*models.ADSB, error) {
+func (backend Redis) GetAtIndex(key string, index int64) (*models.LocationEvent, error) {
 	cmd := backend.LIndex(context.Background(), key, index)
 
 	if err := cmd.Err(); err != nil {
@@ -68,7 +68,7 @@ func (backend Redis) GetAtIndex(key string, index int64) (*models.ADSB, error) {
 
 	// unmarshal
 
-	event := &models.ADSB{}
+	event := &models.LocationEvent{}
 	err := json.Unmarshal([]byte(cmd.Val()), event)
 
 	// delete event if mangled
@@ -82,10 +82,10 @@ func (backend Redis) GetAtIndex(key string, index int64) (*models.ADSB, error) {
 	return event, err
 }
 
-func (backend Redis) GetHead(key string) (*models.ADSB, error) {
+func (backend Redis) GetHead(key string) (*models.LocationEvent, error) {
 	return backend.GetAtIndex(key, 0)
 }
 
-func (backend Redis) GetTail(key string) (*models.ADSB, error) {
+func (backend Redis) GetTail(key string) (*models.LocationEvent, error) {
 	return backend.GetAtIndex(key, -1)
 }

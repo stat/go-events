@@ -22,7 +22,7 @@ func TestCreate(t *testing.T) {
 	engine, err := server.Engine()
 	require.Nil(t, err)
 
-	event := &models.ADSB{
+	event := &models.LocationEvent{
 		AircraftID: "AircraftID",
 		Latitude:   37.6,
 		Longitude:  -95.665,
