@@ -1,3 +1,31 @@
+# Getting Started
+
+First make sure to spin up the local env using:
+```
+make compose-up
+```
+
+Once running, we can execute the tests using:
+```
+make test
+```
+
+The consumer and producer pipeline is tested using Redis as the queue and data backend.
+
+## Performance
+
+Threads: 10
+
+```
+== RUN   TestPipelinePerformance
+-----
+duration: 47.794250481s
+sent: 1000000
+ => 20923.018772 events/second
+-----
+--- PASS: TestPipelinePerformance (47.79s)
+```
+
 ## Commands
 
 ### Running the Tests
@@ -50,5 +78,7 @@ make compose-down
 
 TODO
 * documentation
-* expand test suite
+* tests
 * implement lat/long comp algo
+* re-implement DLQ data backend for Redis
+* re-implement local in-memory data backends
