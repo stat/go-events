@@ -109,11 +109,11 @@ pg-migrate-up: migrate-install
 	@migrate -database="${POSTGRES_CONNECTION_STRING}" -path=./migrations/postgres -lock-timeout=30 -verbose up
 
 release:
-		@$(RELEASEFLAGS) $(GO_BUILD) $(GOFLAGS) -ldflags="$(LDFLAGS)" -o $(BUILDS)/release .
+	@$(RELEASEFLAGS) $(GO_BUILD) $(GOFLAGS) -ldflags="$(LDFLAGS)" -o $(BUILDS)/release .
 
 .PHONY: run
 run: clean build ## run with .env
-		@$(BUILDS)/$(TARGET)
+	@$(BUILDS)/$(TARGET)
 
 .PHONY: test
 test: ## run tests
