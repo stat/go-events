@@ -1,0 +1,166 @@
+version: '3'
+
+networks:
+  grid:
+    driver: bridge
+
+services:
+
+  api:
+    build: .
+    networks:
+      - grid
+    ports:
+      - 8081:${HTTP_SERVER_PORT}
+    env_file:
+      - .env.release
+    depends_on:
+      # cassandra-migrate:
+      #   condition: service_completed_successfully
+      # postgres-migrate:
+      #   condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+  asynqmon:
+    image: hibiken/asynqmon:latest
+    networks:
+      - grid
+    ports:
+      - ${ASYNQMON_PORT:-9081}:9080
+    command: [
+      "--redis-addr",
+      "redis:${REDIS_PORT:?err}",
+    ]
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # cassandra-00:
+  #   container_name: cassandra-00
+  #   image: cassandra:latest
+  #   networks:
+  #     - grid
+  #   ports:
+  #     - ${CASSANDRA_CQL_PORT:-9042}:9042
+  #     - ${CASSANDRA_CQL_SSL_PORT:-9142}:9142
+  #   environment:
+  #     - CASSANDRA_CLUSTER_NAME=${CASSANDRA_CLUSTER_NAME:-local-cluster}
+  #     - CASSANDRA_DC=${CASSANDRA_DC:-local-dc}
+  #     - CASSANDRA_ENDPOINT_SNITCH=${CASSANDRA_ENDPOINT_SNITCH:-GossipingPropertyFileSnitch}
+  #     - CASSANDRA_NUM_TOKENS=${CASSANDRA_NUM_TOKENS:-128}
+  #     - CASSANDRA_RACK=${CASSANDRA_RACK:-local-rack}
+  #     - CASSANDRA_SEEDS=cassandra-00
+  #   restart: unless-stopped
+  #   volumes:
+  #     - .data/cassandra/node-00:/var/lib/cassandra
+  #   # user: ${CURRENT_UID:?err}
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "[ $$(nodetool statusgossip) = running ]"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+  # cassandra-init:
+  #   image: cassandra:latest
+  #   networks:
+  #     - grid
+  #   entrypoint: ["/init.sh"]
+  #   environment:
+  #     - CASSANDRA_CQL_PORT=${CASSANDRA_CQL_PORT:-9042}:9042
+  #     - CASSANDRA_KEYSPACE=${CASSANDRA_KEYSPACE:?err}
+  #   restart: no
+  #   volumes:
+  #     - ./docker/cassandra/init.sh:/init.sh
+  #   depends_on:
+  #     cassandra-00:
+  #       condition: service_healthy
+
+  # cassandra-migrate:
+  #   image: migrate/migrate:latest
+  #   networks:
+  #     - grid
+  #   volumes:
+  #     - ./migrations/cassandra:/migrations
+  #   command: [
+  #     "-verbose",
+  #     "-path",
+  #     "/migrations/cassandra",
+  #     "-database",
+  #     "cassandra://${CASSANDRA_HOSTS}:${CASSANDRA_CQL_PORT}/${CASSANDRA_KEYSPACE}"
+  #     "up"
+  #   ]
+  #   depends_on:
+  #     cassandra:
+  #       condition: service_healthy
+  #     cassandra-init:
+  #       condition: service_completed_successfully
+          
+  # postgres:
+  #   image: postgres:16
+  #   networks:
+  #     - grid
+  #   ports:
+  #     - ${POSTGRES_PORT:-5432}:5432
+  #   environment:
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?err}
+  #     - PGUSER=${POSTGRES_USER:?err}
+  #     - POSTGRES_DB=${POSTGRES_DB:?err}
+  #   restart: unless-stopped
+  #   volumes:
+  #     - .data/postgres:/var/lib/postgresql/data
+  #   # user: ${CURRENT_UID:?err}
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+  # postgres-migrate:
+  #   image: migrate/migrate:latest
+  #   networks:
+  #     - grid
+  #   volumes:
+  #     - ./migrations/postgres:/migrations
+  #   command: [
+  #     "-verbose",
+  #     "-path",
+  #     "/migrations",
+  #     "-database",
+  #     "postgres://${POSTGRES_USER:?err}:${POSTGRES_PASSWORD:?err}@postgres:${POSTGRES_PORT:?err}/${POSTGRES_DB}?sslmode=disable",
+  #     "up"
+  #   ]
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+
+  redis:
+    image: redis:latest
+    command: >
+      redis-server
+      --save 60 1
+      --loglevel warning
+    networks:
+      - grid
+    ports:
+      - ${REDIS_PORT:-6379}:6379
+    restart: unless-stopped
+    volumes: 
+      - .data/redis:/data
+    # user: ${CURRENT_UID:?err}
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    networks:
+      - grid
+    ports:
+      - ${REDIS_INSIGHT_PORT:-5540}:5540
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy

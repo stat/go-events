@@ -65,13 +65,12 @@ clean: ## remove the build directory
 	@$(RM) -r $(BUILDS)
 
 .PHONY: compose-up
-compose-up: 
-	@docker-compose up --remove-orphans
+compose-up: release
+	@docker-compose up --build --remove-orphans
 
 .PHONY: compose-down
 compose-down:
 	@docker-compose down
-
 
 .PHONY: migrate-install
 migrate-install:
@@ -109,14 +108,16 @@ pg-migrate-force: migrate-install
 pg-migrate-up: migrate-install
 	@migrate -database="${POSTGRES_CONNECTION_STRING}" -path=./migrations/postgres -lock-timeout=30 -verbose up
 
+release:
+		@$(RELEASEFLAGS) $(GO_BUILD) $(GOFLAGS) -ldflags="$(LDFLAGS)" -o $(BUILDS)/release .
+
 .PHONY: run
 run: clean build ## run with .env
 		@$(BUILDS)/$(TARGET)
 
 .PHONY: test
 test: ## run tests
-	# @$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v $(TESTS)
-	@$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v -run TestPipeline ./pkg/tasks
+	@$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v $(TESTS)
 
 .PHONY: help
 help:
