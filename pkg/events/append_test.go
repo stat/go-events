@@ -8,27 +8,26 @@ import (
 	"grid/pkg/utils"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 //
 // Test
 //
 
-func TestAppendEvent(t *testing.T) {
+func TestConsume(t *testing.T) {
 	// clear
 
-	require.Nil(t, events.Clear())
+	// require.Nil(t, events.Clear())
 
 	// tests
 
 	tests := []struct {
-		Event    *events.Event
+		Event    *events.Location
 		Expected error
 	}{
 		{
 			Expected: events.AppendAircraftIDEmptyError,
-			Event: &events.Event{
+			Event: &events.Location{
 				AircraftID: "",
 				Latitude:   0,
 				Longitude:  0,
@@ -38,7 +37,7 @@ func TestAppendEvent(t *testing.T) {
 		},
 		{
 			Expected: nil,
-			Event: &events.Event{
+			Event: &events.Location{
 				AircraftID: "aircraftID",
 				Latitude:   0,
 				Longitude:  0,

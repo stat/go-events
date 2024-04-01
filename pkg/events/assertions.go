@@ -1,10 +1,11 @@
 package events
 
 import (
+	"grid/pkg/models"
 	"time"
 )
 
-func isEventEqual(e1, e2 *Event) bool {
+func isEventEqual(e1, e2 *models.ADSB) bool {
 	// sanity check
 
 	if e1 == nil || e2 == nil {

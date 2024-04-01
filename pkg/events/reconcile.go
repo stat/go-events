@@ -2,10 +2,11 @@ package events
 
 import (
 	"fmt"
+	"grid/pkg/models"
 	"sort"
 )
 
-func Reconcile(aircraftID string) ([]*Event, error) {
+func Reconcile(aircraftID string) ([]*models.ADSB, error) {
 	// get events by aircraftID
 
 	data := Index[aircraftID]
@@ -24,9 +25,9 @@ func Reconcile(aircraftID string) ([]*Event, error) {
 
 	// initialize reconciled events
 
-	reconciledEvents := []*Event{}
+	reconciledEvents := []*models.ADSB{}
 
-	var event *Event = nil
+	var event *models.ADSB = nil
 	for _, item := range data {
 		// determine if equal, then resume
 		if isEventEqual(event, item) {

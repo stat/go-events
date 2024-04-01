@@ -1,5 +1,7 @@
 package events
 
-func New() (map[string][]*Event, error) {
-	return make(map[string][]*Event), nil
+import "grid/pkg/models"
+
+func New() (map[string][]*models.ADSB, error) {
+	return make(map[string][]*models.ADSB), nil
 }
