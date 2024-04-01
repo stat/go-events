@@ -6,7 +6,6 @@ We need to make sure we have the following installed:
 ```
 go 1.22
 docker
-docker-compose
 ```
 
 go can be installed and managed with GVM https://github.com/moovweb/gvm
@@ -15,7 +14,6 @@ Using Homebrew:
 
 ```
 brew install --cask docker
-brew install docker-compose
 ```
 
 ## Running the tests
@@ -104,3 +102,5 @@ TODO
 * implement lat/long comp algo
 * re-implement DLQ data backend for Redis
 * re-implement local in-memory data backends
+* implement remaining http endpoints (mostly all)
+* implement websocket that pulls from the redis cache every second
