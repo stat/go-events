@@ -49,7 +49,6 @@ endif
 
 export
 
-
 $(BUILDS)/$(TARGET): $(SRC)
 	@$(GO_BUILD) $(GOFLAGS) -ldflags="$(LDFLAGS)" -tags="$(GOTAGS)" -o $(BUILDS)/$(TARGET) .
 	@echo Binary "(v${MAJOR}.${MINOR}.${PATCH})" built to $(BUILDS)/$(TARGET)!
