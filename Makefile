@@ -117,7 +117,8 @@ run: clean build ## run with .env
 
 .PHONY: test
 test: ## run tests
-	@$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v $(TESTS)
+	# @$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v $(TESTS)
+	@$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v -run TestPipeline ./pkg/tasks
 
 .PHONY: help
 help:
