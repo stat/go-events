@@ -1,6 +1,28 @@
 # Getting Started
 
-First make sure to spin up the local env using:
+## Prereqs
+
+We need to make sure we have the following installed:
+```
+go 1.22
+docker
+docker-compose
+```
+
+go can be installed and managed with GVM https://github.com/moovweb/gvm
+
+Using Homebrew:
+
+```
+brew install --cask docker
+brew install docker-compose
+```
+
+## Running the tests
+
+First copy .env.local to .env so that it may be used with docker compose and make commands
+
+Next make sure to spin up the local env using:
 ```
 make compose-up
 ```
