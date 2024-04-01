@@ -1,5 +1,80 @@
 package events_backends
 
+import (
+	"grid/pkg/env"
+	"grid/pkg/models"
+	"grid/pkg/repos/events/provider"
+)
+
+type Local struct {
+	Data map[string][]interface{}
+}
+
+func (backend Local) Initialize(vars *env.Vars) (provider.Provider, error) {
+	concrete := Local{}
+
+	return concrete, nil
+}
+
+func (backend Local) Append(key string, v interface{}) error {
+	l, ok := backend.Data[key]
+
+	if !ok {
+		l = []interface{}{}
+	}
+
+	l = append(l, v)
+
+	backend.Data[key] = l
+
+	return nil
+}
+
+func (backend Local) Del(key string) error {
+	// TODO: implement or remove me
+	return nil
+}
+
+func (backend Local) DelAtIndex(key string, index int64) error {
+	// TODO: implement or remove me
+	return nil
+}
+
+func (backend Local) DelHead(key string) error {
+	l, ok := backend.Data[key]
+
+	if !ok {
+		return nil
+	}
+
+	l = l[:len(l)-1]
+
+	backend.Data[key] = l
+
+	return nil
+}
+
+func (backend Local) DelTail(key string) error {
+	// TODO: implement or remove me
+	return nil
+}
+func (backend Local) Get(key string) (*models.LocationEvent, error) {
+	// TODO: implement or remove me
+	return nil, nil
+}
+
+func (backend Local) GetAtIndex(key string, index int64) (*models.LocationEvent, error) {
+	return nil, nil
+}
+
+func (backend Local) GetHead(key string) (*models.LocationEvent, error) {
+	return nil, nil
+}
+
+func (backend Local) GetTail(key string) (*models.LocationEvent, error) {
+	return nil, nil
+}
+
 // var (
 //   local = map[string][]interface{}{}
 //   cache = map[string]interface{}{}
