@@ -106,3 +106,5 @@ TODO
 * implement websocket that pulls from the redis cache every second
 * implement cassandra as the raw stream data stores for filtered and discarded
 * establish cassandra schema migrations
+* implmement postgres as the persistant cached data store against redis
+* implemment data expirations/cleaners within redis
