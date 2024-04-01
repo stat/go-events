@@ -38,10 +38,12 @@ func (backend Redis) Append(key string, v interface{}) error {
 }
 
 func (backend Redis) Del(key string) error {
+	// TODO: implement or remove me
 	return nil
 }
 
 func (backend Redis) DelAtIndex(key string, index int64) error {
+	// TODO: implement or remove me
 	return nil
 }
 
@@ -52,10 +54,12 @@ func (backend Redis) DelHead(key string) error {
 }
 
 func (backend Redis) DelTail(key string) error {
+	// TODO: implement or remove me
 	return nil
 }
 
 func (backend Redis) Get(key string) (*models.LocationEvent, error) {
+	// TODO: implement or remove me
 	return nil, nil
 }
 
