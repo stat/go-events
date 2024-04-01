@@ -108,7 +108,7 @@ func (processor *Payload) ProcessTask(ctx context.Context, t *asynq.Task) error 
 
 	if err != nil {
 		// TODO: write to DLQ
-		return err
+		return nil
 	}
 
 	// coreograph
