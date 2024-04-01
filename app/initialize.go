@@ -55,28 +55,5 @@ func Initialize() (*env.Vars, error) {
 }
 
 func InitializeWithVars(vars *env.Vars) error {
-	// initialize with env
-
-	if err := Initializers.Execute(vars); err != nil {
-		return err
-	}
-
-	// // await termination
-
-	// cExit := make(chan os.Signal, 1)
-	// signal.Notify(cExit, os.Interrupt, syscall.SIGTERM)
-
-	// <-cExit
-
-	// // terminate
-
-	// if err := Terminate(vars); err != nil {
-	//   return err
-	// }
-
-	// // log shutdown
-
-	// log.Println("gracefully shutdown!")
-
-	return nil
+	return Initializers.Execute(vars)
 }
