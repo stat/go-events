@@ -28,11 +28,6 @@ sent: 1000000
 
 ## Commands
 
-### Running the Tests
-```
-make test
-```
-
 ### Spinning it up
 ```
 make compose-up
@@ -41,6 +36,11 @@ make compose-up
 ### Spinning it down
 ```
 make compose-down
+```
+
+### Running the Tests
+```
+make test
 ```
 
 <!-- ### Create A Migration -->
