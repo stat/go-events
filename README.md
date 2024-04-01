@@ -104,3 +104,5 @@ TODO
 * re-implement local in-memory data backends
 * implement remaining http endpoints (mostly all)
 * implement websocket that pulls from the redis cache every second
+* implement cassandra as the raw stream data stores for filtered and discarded
+* establish cassandra schema migrations
