@@ -18,9 +18,11 @@ import (
 	_ "grid/testing"
 )
 
+// TODO: refactor me
+
 func TestPipelinePerformance(t *testing.T) {
 	maxAircrafts := int(1e4)
-	maxEvents := int(1e4)
+	maxEvents := int(1e6)
 	maxStations := int(1e6)
 
 	threads := 10
