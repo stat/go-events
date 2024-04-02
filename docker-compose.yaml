@@ -149,7 +149,7 @@ services:
       - .data/redis:/data
     # user: ${CURRENT_UID:?err}
     healthcheck:
-      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
       interval: 10s
       timeout: 5s
       retries: 5
