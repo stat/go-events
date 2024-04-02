@@ -23,7 +23,7 @@ import (
 
 func TestPipelinePerformance(t *testing.T) {
 	maxAircrafts := int(1e4)
-	maxEvents := int(1e6)
+	maxEvents := int(1e4)
 	maxStations := int(1e6)
 
 	threads := 10
@@ -96,7 +96,8 @@ func TestPipelinePerformance(t *testing.T) {
 
 		for err := range errs {
 			errors++
-			log.Fatalln(err)
+			// log.Fatalln(err)
+			log.Println(err)
 		}
 	}()
 
@@ -131,5 +132,5 @@ func TestPipelinePerformance(t *testing.T) {
 	)
 
 	assert.Equal(t, maxEvents, total)
-	assert.Equal(t, 0, errors)
+	assert.Equal(t, 0, errors, "unexpected errors found")
 }

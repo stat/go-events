@@ -8,7 +8,7 @@ import (
 type Provider interface {
 	GetAircraftLocation() (*models.LocationEvent, error)
 	GetAircraftsLocations(key string) (map[string]*models.LocationEvent, error)
-	UpsertAircraftLocation(key string, v interface{}) error
+	UpsertAircraftLocation(key string, v *models.LocationEvent) error
 
 	Initialize(vars *env.Vars) (Provider, error)
 }

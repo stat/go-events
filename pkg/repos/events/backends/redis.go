@@ -31,8 +31,14 @@ func (backend Redis) Initialize(vars *env.Vars) (provider.Provider, error) {
 	return concrete, nil
 }
 
-func (backend Redis) Append(key string, v interface{}) error {
-	cmd := backend.LPush(context.Background(), key, v)
+func (backend Redis) Append(key string, v *models.LocationEvent) error {
+	marshalled, err := json.Marshal(v)
+
+	if err != nil {
+		return err
+	}
+
+	cmd := backend.LPush(context.Background(), key, marshalled)
 
 	return cmd.Err()
 }
@@ -58,7 +64,7 @@ func (backend Redis) DelTail(key string) error {
 	return nil
 }
 
-func (backend Redis) Get(key string) (*models.LocationEvent, error) {
+func (backend Redis) Get(key string) ([]*models.LocationEvent, error) {
 	// TODO: implement or remove me
 	return nil, nil
 }
@@ -93,3 +99,8 @@ func (backend Redis) GetHead(key string) (*models.LocationEvent, error) {
 func (backend Redis) GetTail(key string) (*models.LocationEvent, error) {
 	return backend.GetAtIndex(key, -1)
 }
+
+// func Set(key, []*models.LocationEvent) error {
+//   // TODO: implement or remove me
+//   return nil
+// }

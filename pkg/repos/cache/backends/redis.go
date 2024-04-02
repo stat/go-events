@@ -2,6 +2,7 @@ package backends
 
 import (
 	"context"
+	"encoding/json"
 	"grid/pkg/db/redis"
 	"grid/pkg/env"
 	"grid/pkg/models"
@@ -20,7 +21,7 @@ const (
 
 func (backend Redis) Initialize(vars *env.Vars) (provider.Provider, error) {
 	args := *vars
-	args.RedisDB = vars.RedisDBEvents
+	args.RedisDB = vars.RedisDBCache
 
 	concrete := Redis{}
 	client, err := redis.NewWithEnv(utils.Ref(args))
@@ -35,14 +36,22 @@ func (backend Redis) Initialize(vars *env.Vars) (provider.Provider, error) {
 }
 
 func (backend Redis) GetAircraftLocation() (*models.LocationEvent, error) {
+	// TODO: implement or remove me
 	return nil, nil
 }
 
 func (backend Redis) GetAircraftsLocations(key string) (map[string]*models.LocationEvent, error) {
+	// TODO: implement or remove me
 	return nil, nil
 }
 
-func (backend Redis) UpsertAircraftLocation(key string, v interface{}) error {
-	cmd := backend.HSet(context.Background(), AircraftLocationsKey, key, v)
+func (backend Redis) UpsertAircraftLocation(key string, v *models.LocationEvent) error {
+	marshalled, err := json.Marshal(v)
+
+	if err != nil {
+		return err
+	}
+
+	cmd := backend.HSet(context.Background(), AircraftLocationsKey, key, marshalled)
 	return cmd.Err()
 }

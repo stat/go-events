@@ -119,6 +119,7 @@ run: clean build ## run with .env
 test: ## run tests
 	# @$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v $(TESTS)
 	@$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v -run TestPipeline ./pkg/tasks
+	# @$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v -run TestLocal ./pkg/repos/events/backends
 
 .PHONY: help
 help:

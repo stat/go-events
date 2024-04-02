@@ -25,15 +25,15 @@ func Process(event *models.LocationEvent) error {
 
 	// marshal
 
-	eventJSON, err := json.Marshal(event)
+	// eventJSON, err := json.Marshal(event)
 
-	if err != nil {
-		return err
-	}
+	// if err != nil {
+	//   return err
+	// }
 
 	// add event to airplaneID
 
-	err = events.Backend.Append(key, eventJSON)
+	err := events.Backend.Append(key, event)
 
 	if err != nil {
 		return err
@@ -41,7 +41,7 @@ func Process(event *models.LocationEvent) error {
 
 	// update cache
 
-	err = cache.Backend.UpsertAircraftLocation(key, eventJSON)
+	err = cache.Backend.UpsertAircraftLocation(key, event)
 
 	if err != nil {
 		return err
