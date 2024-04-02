@@ -1,14 +1,20 @@
 package events_backends
 
 import (
+	"errors"
 	"grid/pkg/env"
 	"grid/pkg/models"
 	"grid/pkg/repos/events/provider"
 )
 
 type Local struct {
-	Data map[string][]interface{}
+	Data map[string][]*models.LocationEvent
 }
+
+var (
+	LocalEventBackendKeyNotFound      = errors.New("Local event backend could not find key")
+	LocalEventBackendIndexOutOfBounds = errors.New("Local event backend index out of bounds")
+)
 
 func (backend Local) Initialize(vars *env.Vars) (provider.Provider, error) {
 	concrete := Local{}
@@ -16,11 +22,11 @@ func (backend Local) Initialize(vars *env.Vars) (provider.Provider, error) {
 	return concrete, nil
 }
 
-func (backend Local) Append(key string, v interface{}) error {
+func (backend Local) Append(key string, v *models.LocationEvent) error {
 	l, ok := backend.Data[key]
 
 	if !ok {
-		l = []interface{}{}
+		l = []*models.LocationEvent{}
 	}
 
 	l = append(l, v)
@@ -64,99 +70,29 @@ func (backend Local) Get(key string) (*models.LocationEvent, error) {
 }
 
 func (backend Local) GetAtIndex(key string, index int64) (*models.LocationEvent, error) {
-	return nil, nil
+	l, ok := backend.Data[key]
+
+	if !ok {
+		return nil, LocalEventBackendKeyNotFound
+	}
+
+	if int64(len(l)) < index {
+		return nil, LocalEventBackendIndexOutOfBounds
+	}
+
+	return l[index], nil
 }
 
 func (backend Local) GetHead(key string) (*models.LocationEvent, error) {
-	return nil, nil
+	l, ok := backend.Data[key]
+
+	if !ok {
+		return nil, LocalEventBackendKeyNotFound
+	}
+
+	return backend.GetAtIndex(key, int64(len(l))-1)
 }
 
 func (backend Local) GetTail(key string) (*models.LocationEvent, error) {
-	return nil, nil
+	return backend.GetAtIndex(key, 0)
 }
-
-// var (
-//   local = map[string][]interface{}{}
-//   cache = map[string]interface{}{}
-// )
-
-// func addEvent(key string, v interface{}) error {
-//   cmd := tasks.AircraftDB.LPush(context.Background(), key, v)
-
-//   return cmd.Err()
-// }
-
-// func addEventLocal(key string, v interface{}) error {
-//   l, ok := local[key]
-
-//   if !ok {
-//     l = []interface{}{}
-//   }
-
-//   l = append(l, v)
-
-//   local[key] = l
-
-//   return nil
-// }
-
-// func getEventAtIndexLocal(key string, index int64) (*models.LocationEvent, error) {
-//   l, ok := local[key]
-
-//   if !ok {
-//     return nil, fmt.Errorf("hi")
-//   }
-
-//   if int64(len(local)) < index {
-//     return nil, fmt.Errorf("out of bounds")
-//   }
-
-//   data := l[index]
-
-//   bytes, ok := data.([]byte)
-
-//   if !ok {
-//     return nil, fmt.Errorf("cannot cast to []byte")
-//   }
-
-//   event := &models.LocationEvent{}
-
-//   // unmarshal
-
-//   err := json.Unmarshal(bytes, event)
-
-//   // delete event if mangled
-
-//   if err != nil {
-//     err = delLatestEventLocal(key)
-//   }
-
-//   return event, err
-// }
-
-// func getHeadEventLocal(key string) (*models.LocationEvent, error) {
-//   return getEventAtIndexLocal(key, 0)
-// }
-
-// func getTailEventLocal(key string) (*models.LocationEvent, error) {
-//   return getEventAtIndexLocal(key, 0)
-// }
-
-// func delLatestEventLocal(key string) error {
-//   l, ok := local[key]
-
-//   if !ok {
-//     return nil
-//   }
-
-//   l = l[:len(l)-1]
-
-//   local[key] = l
-
-//   return nil
-// }
-
-// func updateCacheLocal(key string, v interface{}) error {
-//   cache[key] = v
-//   return nil
-// }
