@@ -36,6 +36,18 @@ The consumer and producer pipeline is tested using Redis as the queue and data b
 
 Threads: 10
 
+### Local
+```
+== RUN   TestPipelinePerformance
+-----
+duration: 9.521344489s
+sent: 10000000
+ => 1050271.840448 events/second
+-----
+--- PASS: TestPipelinePerformance (9.52s)
+
+```
+### Redis
 ```
 == RUN   TestPipelinePerformance
 -----
