@@ -4,21 +4,21 @@ networks:
 
 services:
 
-  api:
-    build: .
-    networks:
-      - grid
-    ports:
-      - 8081:${HTTP_SERVER_PORT}
-    env_file:
-      - .env.release
-    depends_on:
-      # cassandra-migrate:
-      #   condition: service_completed_successfully
-      # postgres-migrate:
-      #   condition: service_completed_successfully
-      redis:
-        condition: service_healthy
+  # api:
+  #   build: .
+  #   networks:
+  #     - grid
+  #   ports:
+  #     - 8081:${HTTP_SERVER_PORT}
+  #   env_file:
+  #     - .env.release
+  #   depends_on:
+  #     # cassandra-migrate:
+  #     #   condition: service_completed_successfully
+  #     # postgres-migrate:
+  #     #   condition: service_completed_successfully
+  #     redis:
+  #       condition: service_healthy
 
   asynqmon:
     image: hibiken/asynqmon:latest

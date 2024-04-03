@@ -22,6 +22,7 @@ type Vars struct {
 	RedisDBEvents    int    `mapstructure:"REDIS_DB_EVENTS"`
 	RedisHost        string `mapstructure:"REDIS_HOST"`
 	RedisPort        string `mapstructure:"REDIS_PORT"`
+	WebSocketPort    string `mapstructure:"WEB_SOCKET_PORT"`
 }
 
 func Load() (*Vars, error) {

@@ -10,6 +10,7 @@ import (
 	"grid/pkg/repos/events"
 	"grid/pkg/tasks"
 	"grid/pkg/transport/http/server"
+	"grid/pkg/transport/ws/socket"
 	"grid/workers"
 
 	cache_backends "grid/pkg/repos/cache/backends"
@@ -28,9 +29,10 @@ var (
 		cache.Initialize[cache_backends.Redis],
 		events.Initialize[events_backends.Redis],
 
-		// http
+		// transport
 
 		server.Initialize,
+		socket.Initialize,
 
 		// asynq task registry
 

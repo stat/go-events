@@ -27,7 +27,7 @@ func (backend Local) GetAircraftLocation() (*models.LocationEvent, error) {
 	return nil, nil
 }
 
-func (backend Local) GetAircraftsLocations(key string) (map[string]*models.LocationEvent, error) {
+func (backend Local) GetAircraftsLocations() (map[string]*models.LocationEvent, error) {
 	// TODO: implement or remove me
 	return nil, nil
 }
