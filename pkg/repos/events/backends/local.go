@@ -8,12 +8,17 @@ import (
 	"grid/pkg/env"
 	"grid/pkg/models"
 	"grid/pkg/repos/events/provider"
+	//"github.com/hashicorp/go-set/v2"
 )
 
 type Local struct {
 	// Data map[string][]*models.LocationEvent
 	Data *sync.Map
 }
+
+const (
+	LocalDLQSuffix = "-dlq"
+)
 
 var (
 	LocalEventBackendKeyNotFound      = errors.New("Local event backend could not find key")
@@ -54,6 +59,15 @@ func (backend Local) Append(key string, v *models.LocationEvent) error {
 
 	// backend.Data[key] = l
 	backend.Data.Store(key, l)
+
+	return nil
+}
+
+func (backend Local) AppendDLQ(key string, v *models.LocationEvent) error {
+	dlqKey := fmt.Sprintf("%s%s", key, RedisDLQSuffix)
+	if err := backend.Append(dlqKey, v); err != nil {
+		return err
+	}
 
 	return nil
 }

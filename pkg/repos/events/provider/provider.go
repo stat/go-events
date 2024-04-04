@@ -7,6 +7,7 @@ import (
 
 type Provider interface {
 	Append(key string, v *models.LocationEvent) error
+	AppendDLQ(key string, v *models.LocationEvent) error
 	Del(key string) error
 	DelAtIndex(key string, index int64) error
 	DelHead(key string) error

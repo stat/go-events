@@ -72,25 +72,6 @@ func Process(event *models.LocationEvent) error {
 	return nil
 }
 
-func writeDLQ[T any](key string, v *T, err error) error {
-	// event := &events.DLQ[T]{
-	//   Error: err,
-	//   Event: v,
-	// }
-
-	// eventJSON, err := json.Marshal(event)
-
-	// if err != nil {
-	//   return err
-	// }
-
-	// dlq := fmt.Sprintf("%s%s", key, DLQ_SUFFIX)
-
-	// addEvent(dlq, eventJSON)
-
-	return nil
-}
-
 func (processor *Payload) ProcessTask(ctx context.Context, t *asynq.Task) error {
 	// unmarshal
 
@@ -107,8 +88,7 @@ func (processor *Payload) ProcessTask(ctx context.Context, t *asynq.Task) error 
 	err := Process(event)
 
 	if err != nil {
-		// TODO: write to DLQ
-		return nil
+		return events.Backend.AppendDLQ(event.AircraftID, event)
 	}
 
 	// coreograph

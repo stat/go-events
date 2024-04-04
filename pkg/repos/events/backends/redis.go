@@ -3,6 +3,7 @@ package events_backends
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"grid/pkg/db/redis"
 	"grid/pkg/env"
@@ -14,6 +15,11 @@ import (
 type Redis struct {
 	*redis.Client
 }
+
+const (
+	RedisDLQSuffix = "-dlq"
+	RedisDLQIndex  = "dlq-index"
+)
 
 func (backend Redis) Initialize(vars *env.Vars) (provider.Provider, error) {
 	args := *vars
@@ -41,6 +47,26 @@ func (backend Redis) Append(key string, v *models.LocationEvent) error {
 	cmd := backend.LPush(context.Background(), key, marshalled)
 
 	return cmd.Err()
+}
+
+func (backend Redis) AppendDLQ(key string, v *models.LocationEvent) error {
+	// write to DLQ
+
+	dlqKey := fmt.Sprintf("%s%s", key, RedisDLQSuffix)
+	if err := backend.Append(dlqKey, v); err != nil {
+		return err
+	}
+
+	// add DLQ key to cassandra write buffer
+
+	cmd := backend.SAdd(context.Background(), RedisDLQIndex, dlqKey)
+	if err := cmd.Err(); err != nil {
+		return err
+	}
+
+	// success
+
+	return nil
 }
 
 func (backend Redis) Del(key string) error {
