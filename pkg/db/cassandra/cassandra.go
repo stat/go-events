@@ -10,7 +10,6 @@ type Client struct {
 
 type Options struct {
 	CassandraKeyspace string
-	Cassandra
 }
 
 func Initialize(vars *env.Vars) error {
