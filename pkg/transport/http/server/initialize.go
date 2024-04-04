@@ -32,13 +32,7 @@ func Initialize(env *env.Vars) error {
 		return ServerAlreadyInitializedError
 	}
 
-	// create
-
-	engine := gin.Default()
-
-	// initialize
-
-	err := Initializers.Execute(engine)
+	engine, err := New()
 
 	if err != nil {
 		return err
@@ -55,4 +49,22 @@ func Initialize(env *env.Vars) error {
 	// success
 
 	return nil
+}
+
+func New() (*gin.Engine, error) {
+	// create
+
+	engine := gin.Default()
+
+	// initialize
+
+	err := Initializers.Execute(engine)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// success
+
+	return engine, nil
 }
