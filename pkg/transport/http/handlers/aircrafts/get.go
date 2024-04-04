@@ -9,10 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type URIParams struct {
-	AircraftID string `uri:"aircraft_id"`
-}
-
 func Get(c *gin.Context) {
 	uriParams := &URIParams{}
 
