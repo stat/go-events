@@ -9,5 +9,5 @@ import (
 )
 
 func List(c *gin.Context) {
-	respond.With(c, http.StatusOK, "")
+	respond.With(c, http.StatusOK, &struct{}{})
 }
