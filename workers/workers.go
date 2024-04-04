@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"grid/pkg/env"
 	"grid/pkg/tasks/consumer"
+	"grid/pkg/tasks/producer"
 
 	"github.com/hibiken/asynq"
 	"github.com/jinzhu/copier"
@@ -49,6 +50,7 @@ func Initialize(vars *env.Vars) error {
 
 	mux := asynq.NewServeMux()
 	mux.Handle(consumer.Type, &consumer.Payload{})
+	mux.Handle(producer.Type, &producer.Payload{})
 
 	// err = server.Run(mux)
 
