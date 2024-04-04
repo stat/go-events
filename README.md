@@ -110,12 +110,14 @@ make test
 
 TODO
 * documentation
-* tests
+* ~~additional testing ~~
+* test coverage
 * implement lat/long comp algo
-* re-implement DLQ data backend for Redis
-* re-implement local in-memory data backends
-* implement remaining http endpoints (mostly all)
-* implement websocket that pulls from the redis cache every second
+* ~~ re-implement DLQ data backend for Redis ~~
+* ~~ implement DLQ data backend for Local ~~
+* ~~ re-implement local in-memory data backends ~~
+* ~~ implement remaining http endpoints (mostly all) ~~
+* ~~ implement websocket that pulls from the redis cache every second ~~
 * implement cassandra as the raw stream data stores for filtered and discarded
 * establish cassandra schema migrations
 * implmement postgres as the persistant cached data store against redis
