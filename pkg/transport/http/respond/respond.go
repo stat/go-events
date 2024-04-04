@@ -6,16 +6,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Response struct {
-	Data    interface{} `json:"data"`
-	Error   *string     `json:"error"`
-	Message *string     `json:"message"`
+type Response[T any] struct {
+	Data    *T      `json:"data"`
+	Error   *string `json:"error"`
+	Message *string `json:"message"`
 }
 
-func With(c *gin.Context, code int, data interface{}) {
+func With[T any](c *gin.Context, code int, data *T) {
 	c.JSON(
 		code,
-		&Response{
+		&Response[T]{
 			Data: data,
 		},
 	)
@@ -24,7 +24,7 @@ func With(c *gin.Context, code int, data interface{}) {
 func WithError(c *gin.Context, code int, err error) {
 	c.JSON(
 		code,
-		&Response{
+		&Response[interface{}]{
 			Error: utils.Ref(err.Error()),
 		},
 	)
