@@ -35,9 +35,22 @@ func (backend Redis) Initialize(vars *env.Vars) (provider.Provider, error) {
 	return concrete, nil
 }
 
-func (backend Redis) GetAircraftLocation() (*models.LocationEvent, error) {
-	// TODO: implement or remove me
-	return nil, nil
+func (backend Redis) GetAircraftLocation(key string) (*models.LocationEvent, error) {
+	cmd := backend.HGet(context.Background(), AircraftLocationsKey, key)
+	err := cmd.Err()
+
+	if err != nil {
+		return nil, err
+	}
+
+	result := &models.LocationEvent{}
+	value := cmd.Val()
+
+	if err := json.Unmarshal([]byte(value), result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
 
 func (backend Redis) GetAircraftsLocations() (map[string]*models.LocationEvent, error) {
