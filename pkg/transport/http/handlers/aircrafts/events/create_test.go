@@ -3,13 +3,14 @@ package aircrafts_events_test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"grid/pkg/models"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 
-	"grid/pkg/http/server"
+	"grid/pkg/transport/http/server"
 	"grid/pkg/utils"
 
 	"github.com/go-playground/assert/v2"
@@ -22,8 +23,10 @@ func TestCreate(t *testing.T) {
 	engine, err := server.Engine()
 	require.Nil(t, err)
 
+	aircraftID := "AircraftID"
+
 	event := &models.LocationEvent{
-		AircraftID: "AircraftID",
+		AircraftID: aircraftID,
 		Latitude:   37.6,
 		Longitude:  -95.665,
 		StationID:  "StationID",
@@ -35,7 +38,7 @@ func TestCreate(t *testing.T) {
 
 	req, _ := http.NewRequest(
 		"POST",
-		"/v1.0/aircrafts/aircraft_id/events",
+		fmt.Sprintf("/v1.0/aircrafts/%s/events", aircraftID),
 		bytes.NewBuffer(payload),
 	)
 
