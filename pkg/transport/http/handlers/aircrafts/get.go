@@ -26,5 +26,7 @@ func Get(c *gin.Context) {
 		return
 	}
 
+	// success
+
 	respond.With(c, http.StatusOK, location)
 }
