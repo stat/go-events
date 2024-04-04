@@ -1,6 +1,7 @@
 package aircrafts_test
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -47,7 +48,7 @@ func TestGet(t *testing.T) {
 
 	req, _ := http.NewRequest(
 		"GET",
-		"/v1.0/aircrafts/"+aircraftID,
+		fmt.Sprintf("/v1.0/aircrafts/%s", aircraftID),
 		nil,
 	)
 
