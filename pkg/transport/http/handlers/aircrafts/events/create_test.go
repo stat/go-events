@@ -4,16 +4,18 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"grid/pkg/models"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 
+	"grid/pkg/models"
+	"grid/pkg/repos/cache"
 	"grid/pkg/transport/http/server"
 	"grid/pkg/utils"
 
-	"github.com/go-playground/assert/v2"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	_ "grid/testing"
@@ -23,15 +25,18 @@ func TestCreate(t *testing.T) {
 	engine, err := server.Engine()
 	require.Nil(t, err)
 
-	aircraftID := "AircraftID"
+	aircraftID := uuid.NewString()
+	timestamp := time.Now()
 
 	event := &models.LocationEvent{
 		AircraftID: aircraftID,
 		Latitude:   37.6,
 		Longitude:  -95.665,
 		StationID:  "StationID",
-		Timestamp:  utils.Ref(time.Now()),
+		Timestamp:  utils.Ref(timestamp),
 	}
+
+	// create
 
 	payload := utils.Must(json.Marshal(event))
 	recorder := httptest.NewRecorder()
@@ -43,6 +48,37 @@ func TestCreate(t *testing.T) {
 	)
 
 	engine.ServeHTTP(recorder, req)
-
 	assert.Equal(t, http.StatusCreated, recorder.Code)
+
+	// sleep
+
+	attempts := 0
+	attemptsMax := 5
+
+	var location *models.LocationEvent
+
+	for {
+		time.Sleep(time.Second * 1)
+
+		attempts++
+		location, err = cache.Backend.GetAircraftLocation(aircraftID)
+
+		if err != nil && attempts < attemptsMax {
+			continue
+		}
+
+		break
+	}
+
+	require.NotEqual(t, attemptsMax, attempts)
+
+	// check
+
+	locationTimestamp := location.Timestamp
+
+	event.Timestamp = nil
+	location.Timestamp = nil
+
+	assert.Equal(t, event, location)
+	assert.WithinDuration(t, timestamp, *locationTimestamp, 0)
 }
