@@ -14,6 +14,7 @@ import (
 	"grid/pkg/utils"
 
 	"github.com/goccy/go-json"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -28,7 +29,7 @@ func TestGet(t *testing.T) {
 
 	// upsert location
 
-	aircraftID := "AircraftID"
+	aircraftID := uuid.NewString()
 	timestamp := time.Now()
 
 	event := &models.LocationEvent{
