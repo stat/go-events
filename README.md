@@ -123,3 +123,5 @@ TODO
 * implmement postgres as the persistant cached data store against redis
 * implmement postgres postgis and migrations for spatial functions
 * implemment data expirations/cleaners within redis
+* swaggo annotations
+* technical diagram
