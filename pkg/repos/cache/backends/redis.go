@@ -3,14 +3,14 @@ package backends
 import (
 	"context"
 	"encoding/json"
+
 	"grid/pkg/db/redis"
 	"grid/pkg/env"
-	"grid/pkg/models"
-	"grid/pkg/repos/cache/provider"
+	"grid/pkg/model"
 	"grid/pkg/utils"
 )
 
-type Redis struct {
+type Redis[V model.Implementer] struct {
 	*redis.Client
 }
 
@@ -19,23 +19,32 @@ const (
 	AircraftLocationsKey = "aircrafts-locations"
 )
 
-func (backend Redis) Initialize(vars *env.Vars) (provider.Provider, error) {
+// func (backend *Redis[V]) Initialize(vars *env.Vars) (provider.Implementer[V], error) {
+func (backend *Redis[V]) Initialize(vars *env.Vars) error {
 	args := *vars
 	args.RedisDB = vars.RedisDBCache
 
-	concrete := Redis{}
+	// concrete := Redis[V]{}
 	client, err := redis.NewWithEnv(utils.Ref(args))
 
 	if err != nil {
-		return concrete, err
+		// return concrete, err
+		return err
 	}
 
-	concrete.Client = client
+	// concrete.Client = client
+	backend.Client = client
 
-	return concrete, nil
+	// return concrete, nil
+
+	return nil
 }
 
-func (backend Redis) GetAircraftLocation(key string) (*models.LocationEvent, error) {
+func (backend *Redis[V]) GetLatest(key string) (*V, error) {
+	return backend.GetAircraftLocation(key)
+}
+
+func (backend *Redis[V]) GetAircraftLocation(key string) (*V, error) {
 	cmd := backend.HGet(context.Background(), AircraftLocationsKey, key)
 	err := cmd.Err()
 
@@ -43,17 +52,18 @@ func (backend Redis) GetAircraftLocation(key string) (*models.LocationEvent, err
 		return nil, err
 	}
 
-	result := &models.LocationEvent{}
+	var result V
+
 	value := cmd.Val()
 
-	if err := json.Unmarshal([]byte(value), result); err != nil {
+	if err := json.Unmarshal([]byte(value), &result); err != nil {
 		return nil, err
 	}
 
-	return result, nil
+	return &result, nil
 }
 
-func (backend Redis) GetAircraftsLocations() (map[string]*models.LocationEvent, error) {
+func (backend *Redis[V]) GetAircraftsLocations() (map[string]*V, error) {
 	cmd := backend.HGetAll(context.Background(), AircraftLocationsKey)
 	err := cmd.Err()
 
@@ -61,24 +71,25 @@ func (backend Redis) GetAircraftsLocations() (map[string]*models.LocationEvent, 
 		return nil, err
 	}
 
-	result := map[string]*models.LocationEvent{}
+	result := map[string]*V{}
 	value := cmd.Val()
 
 	// TODO: rethink this...
-	for k, v := range value {
-		event := &models.LocationEvent{}
 
-		if err := json.Unmarshal([]byte(v), event); err != nil {
+	for k, v := range value {
+		var event V
+
+		if err := json.Unmarshal([]byte(v), &event); err != nil {
 			return nil, err
 		}
 
-		result[k] = event
+		result[k] = &event
 	}
 
 	return result, nil
 }
 
-func (backend Redis) UpsertAircraftLocation(key string, v *models.LocationEvent) error {
+func (backend *Redis[V]) UpsertAircraftLocation(key string, v *V) error {
 	marshalled, err := json.Marshal(v)
 
 	if err != nil {
