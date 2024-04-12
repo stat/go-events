@@ -1,4 +1,4 @@
-package events_backends_test
+package backends_test
 
 import (
 	"testing"
