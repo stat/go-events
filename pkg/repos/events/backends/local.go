@@ -1,4 +1,4 @@
-package events_backends
+package backends
 
 import (
 	"errors"
@@ -6,17 +6,18 @@ import (
 	"sync"
 
 	"grid/pkg/env"
-	"grid/pkg/models"
-	"grid/pkg/repos/events/provider"
+	"grid/pkg/model"
 	//"github.com/hashicorp/go-set/v2"
 )
 
-type Local struct {
+type Local[V model.Implementer] struct {
+	// type Local struct {
 	Data *sync.Map
 }
 
 const (
 	LocalDLQSuffix = "-dlq"
+	// LocalType      = backend.Type("local")
 )
 
 var (
@@ -24,21 +25,25 @@ var (
 	LocalEventBackendIndexOutOfBounds = errors.New("Local event backend index out of bounds")
 )
 
-func (backend Local) Initialize(vars *env.Vars) (provider.Provider, error) {
-	concrete := Local{
-		Data: &sync.Map{},
-	}
+func (backend *Local[V]) Initialize(vars *env.Vars) error {
+	// concrete := Local[V]{
+	//   Data: &sync.Map{},
+	// }
 
 	backend.Data = &sync.Map{}
 
-	return concrete, nil
+	return nil
 }
 
-func (backend Local) Append(key string, v *models.LocationEvent) error {
+func (backend *Local[V]) Append(key string, v *V) error {
+	// var l []interface{}
+
+	// backend.Get(key, &l)
+
 	l, err := backend.Get(key)
 
 	if err != nil {
-		l = []*models.LocationEvent{}
+		l = []*V{}
 	}
 
 	l = append(l, v)
@@ -48,7 +53,7 @@ func (backend Local) Append(key string, v *models.LocationEvent) error {
 	return nil
 }
 
-func (backend Local) AppendDLQ(key string, v *models.LocationEvent) error {
+func (backend *Local[V]) AppendDLQ(key string, v *V) error {
 	dlqKey := fmt.Sprintf("%s%s", key, RedisDLQSuffix)
 	if err := backend.Append(dlqKey, v); err != nil {
 		return err
@@ -57,17 +62,17 @@ func (backend Local) AppendDLQ(key string, v *models.LocationEvent) error {
 	return nil
 }
 
-func (backend Local) Del(key string) error {
+func (backend *Local[V]) Del(key string) error {
 	// TODO: implement or remove me
 	return nil
 }
 
-func (backend Local) DelAtIndex(key string, index int64) error {
+func (backend *Local[V]) DelAtIndex(key string, index int64) error {
 	// TODO: implement or remove me
 	return nil
 }
 
-func (backend Local) DelHead(key string) error {
+func (backend *Local[V]) DelHead(key string) error {
 	l, err := backend.Get(key)
 
 	if err != nil {
@@ -81,18 +86,21 @@ func (backend Local) DelHead(key string) error {
 	return nil
 }
 
-func (backend Local) DelTail(key string) error {
+func (backend *Local[V]) DelTail(key string) error {
 	// TODO: implement or remove me
 	return nil
 }
-func (backend Local) Get(key string) ([]*models.LocationEvent, error) {
+
+func (backend *Local[V]) Get(key string) ([]*V, error) {
+	// func (backend Local[V]) Get(key string) ([]interface{}, error) {
+	// func (backend Local[V]) Get(key string, v interface{}) error {
 	iface, ok := backend.Data.Load(key)
 
 	if !ok {
 		return nil, LocalEventBackendKeyNotFound
 	}
 
-	l, ok := iface.([]*models.LocationEvent)
+	l, ok := iface.([]*V)
 
 	if !ok {
 		return nil, fmt.Errorf("event local get cast error")
@@ -101,7 +109,8 @@ func (backend Local) Get(key string) ([]*models.LocationEvent, error) {
 	return l, nil
 }
 
-func (backend Local) GetAtIndex(key string, index int64) (*models.LocationEvent, error) {
+func (backend *Local[V]) GetAtIndex(key string, index int64) (*V, error) {
+	// func (backend Local) GetAtIndex(key string, index int64, v interface{}) error {
 	l, err := backend.Get(key)
 
 	if err != nil {
@@ -112,10 +121,13 @@ func (backend Local) GetAtIndex(key string, index int64) (*models.LocationEvent,
 		return nil, LocalEventBackendIndexOutOfBounds
 	}
 
+	// v = l[index]
+
+	// return nil
 	return l[index], nil
 }
 
-func (backend Local) GetHead(key string) (*models.LocationEvent, error) {
+func (backend *Local[V]) GetHead(key string) (*V, error) {
 	l, err := backend.Get(key)
 
 	if err != nil {
@@ -125,6 +137,11 @@ func (backend Local) GetHead(key string) (*models.LocationEvent, error) {
 	return backend.GetAtIndex(key, int64(len(l))-1)
 }
 
-func (backend Local) GetTail(key string) (*models.LocationEvent, error) {
+func (backend *Local[V]) GetTail(key string) (*V, error) {
 	return backend.GetAtIndex(key, 0)
+}
+
+func (backend *Local[V]) Set(key string, l []*V) error {
+	// TODO: implement or remove me
+	return nil
 }
