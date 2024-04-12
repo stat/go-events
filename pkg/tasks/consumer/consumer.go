@@ -4,12 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"time"
+
+	// "time"
 
 	"grid/pkg/db/queue"
 	"grid/pkg/models"
-	"grid/pkg/repos/events"
 	"grid/pkg/tasks/producer"
+
+	// "grid/pkg/tasks/producer"
 
 	"github.com/hibiken/asynq"
 )
@@ -30,44 +32,44 @@ var (
 )
 
 func Process(event *models.LocationEvent) error {
-	// TODO: func sanity check
+	// // TODO: func sanity check
 
-	// sanity check
+	// // sanity check
 
-	err := event.Validate()
+	// err := event.Validate()
 
-	if err != nil {
-		return err
-	}
+	// if err != nil {
+	//   return err
+	// }
 
-	key := event.AircraftID
+	// key := event.AircraftID
 
-	// get last
+	// // get last
 
-	lastEvent, err := events.Backend.GetHead(key)
+	// lastEvent, err := events.Backend.GetHead(key)
 
-	// compare
+	// // compare
 
-	if err == nil {
-		// check if the event timestamp is before the latest
-		if event.Timestamp.Before(*lastEvent.Timestamp) {
-			return ProcessEventTimestampBeforeError
-		}
+	// if err == nil {
+	//   // check if the event timestamp is before the latest
+	//   if event.Timestamp.Before(*lastEvent.Timestamp) {
+	//     return ProcessEventTimestampBeforeError
+	//   }
 
-		// check if the event timestamp is equal to the latest
-		if event.Timestamp.Equal(*lastEvent.Timestamp) {
-			return ProcessEventTimestampEqualError
-		}
+	//   // check if the event timestamp is equal to the latest
+	//   if event.Timestamp.Equal(*lastEvent.Timestamp) {
+	//     return ProcessEventTimestampEqualError
+	//   }
 
-		// TODO: implement lat/long comp with stddev
-	}
+	//   // TODO: implement lat/long comp with stddev
+	// }
 
-	// check if the event timestamp is in the future
-	if event.Timestamp.After(time.Now()) {
-		return ProcessEventTimestampAfterError
-	}
+	// // check if the event timestamp is in the future
+	// if event.Timestamp.After(time.Now()) {
+	//   return ProcessEventTimestampAfterError
+	// }
 
-	// success
+	// // success
 
 	return nil
 }
@@ -88,7 +90,8 @@ func (processor *Payload) ProcessTask(ctx context.Context, t *asynq.Task) error 
 	err := Process(event)
 
 	if err != nil {
-		return events.Backend.AppendDLQ(event.AircraftID, event)
+		return nil
+		// return events.Backend.AppendDLQ(event.AircraftID, event)
 	}
 
 	// coreograph
