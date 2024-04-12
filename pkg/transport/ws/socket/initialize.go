@@ -5,51 +5,69 @@ import (
 	"net/http"
 
 	"grid/pkg/env"
-	"grid/pkg/repos/cache"
+	"grid/pkg/model"
 	"grid/pkg/transport/ws/socket/pump"
 
 	"github.com/olahol/melody"
 )
 
-var (
-	instance     *melody.Melody
-	instancePump *pump.Pump
-)
+// var (
+//   instance     *melody.Melody
+//   instancePump *pump.Pump
+// )
 
-func Initialize(vars *env.Vars) error {
-	m := melody.New()
+type Server[CacheModel model.Implementer] struct {
+	*melody.Melody
 
-	http.HandleFunc("/socket", func(w http.ResponseWriter, r *http.Request) {
-		m.HandleRequest(w, r)
-	})
+	Pump *pump.Pump[CacheModel]
+}
 
-	// run
+func (implementation *Server[V]) InitializeFn(options *Options[V]) (func(*env.Vars) error, error) {
+	cache := options.Cache
 
-	go func() {
-		http.ListenAndServe(fmt.Sprintf(":%s", vars.WebSocketPort), nil)
-	}()
+	fn := func(vars *env.Vars) error {
+		//   return nil, nil
+		// }
 
-	instance = m
+		// func Initialize(vars *env.Vars) error {
+		m := melody.New()
 
-	// pump
+		http.HandleFunc("/socket", func(w http.ResponseWriter, r *http.Request) {
+			m.HandleRequest(w, r)
+		})
 
-	p, err := pump.New(m, cache.Backend)
+		// run
 
-	if err != nil {
-		return err
+		go func() {
+			http.ListenAndServe(fmt.Sprintf(":%s", vars.WebSocketPort), nil)
+		}()
+
+		// instance = m
+		implementation.Melody = m
+
+		// pump
+
+		p, err := pump.New[V](m, cache)
+
+		if err != nil {
+			return err
+		}
+
+		err = p.Start()
+
+		if err != nil {
+			return err
+		}
+
+		p.Start()
+
+		// instancePump = p
+		implementation.Pump = p
+
+		// success
+
+		return nil
 	}
 
-	err = p.Start()
-
-	if err != nil {
-		return err
-	}
-
-	p.Start()
-
-	instancePump = p
-
-	// success
-
-	return nil
+	return fn, nil
 }
