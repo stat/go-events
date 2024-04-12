@@ -2,7 +2,11 @@ package workers
 
 import (
 	"fmt"
+
 	"grid/pkg/env"
+	"grid/pkg/model"
+	"grid/pkg/repos/cache"
+	"grid/pkg/repos/events"
 	"grid/pkg/tasks/consumer"
 	"grid/pkg/tasks/producer"
 
@@ -10,57 +14,80 @@ import (
 	"github.com/jinzhu/copier"
 )
 
-var (
-	instance *Server
-)
+// var (
+//   instance *Server
+// )
 
-type Server struct {
+type Server[CacheModel, EventModel model.Implementer] struct {
 	*asynq.Server
 
-	Options *Options
+	Mux     *asynq.ServeMux
+	Options *Options[CacheModel, EventModel]
 }
 
-type Options struct {
+type Options[CacheModel, EventModel model.Implementer] struct {
 	ASYNQConcurrency int
 	RedisDB          int `copier:"RedisBDAsynq"`
 	RedisHost        string
 	RedisPort        string
+
+	Cache  *cache.Repo[CacheModel]
+	Events *events.Repo[EventModel]
 }
 
-func Initialize(vars *env.Vars) error {
-	options := &Options{}
+// var (
+//   Instance *Server[config.CacheModel, config.EventModel]
+// )
 
-	err := copier.Copy(options, vars)
+// func InitializeFn[CacheModel, EventModel model.Implementer](vars *env.Vars) error {
+func (implementation *Server[CacheModel, EventModel]) InitializeFn(options *Options[CacheModel, EventModel]) (func(*env.Vars) error, error) {
+	// options := &Options{}
 
-	if err != nil {
-		return err
-	}
-
-	address := fmt.Sprintf("%s:%s", vars.RedisHost, vars.RedisPort)
-
-	server := asynq.NewServer(
-		asynq.RedisClientOpt{
-			Addr: address,
-			DB:   options.RedisDB,
-		},
-		asynq.Config{
-			Concurrency: vars.ASYNQConcurrency,
-		},
-	)
-
-	mux := asynq.NewServeMux()
-	mux.Handle(consumer.Type, &consumer.Payload{})
-	mux.Handle(producer.Type, &producer.Payload{})
-
-	// err = server.Run(mux)
-
-	go func() {
-		err := server.Run(mux)
+	fn := func(vars *env.Vars) error {
+		err := copier.Copy(options, vars)
 
 		if err != nil {
-			panic(err)
+			return err
 		}
-	}()
 
-	return nil
+		address := fmt.Sprintf("%s:%s", vars.RedisHost, vars.RedisPort)
+
+		// server
+
+		server := asynq.NewServer(
+			asynq.RedisClientOpt{
+				Addr: address,
+				DB:   options.RedisDB,
+			},
+			asynq.Config{
+				Concurrency: vars.ASYNQConcurrency,
+			},
+		)
+
+		implementation.Server = server
+
+		// mux
+
+		mux := asynq.NewServeMux()
+		mux.Handle(consumer.Type, &consumer.Payload{})
+		mux.Handle(producer.Type, &producer.Payload{})
+
+		implementation.Mux = mux
+
+		// err = server.Run(mux)
+
+		// TODO: handle this error
+
+		go func() {
+			err := server.Run(mux)
+
+			if err != nil {
+				panic(err)
+			}
+		}()
+
+		return nil
+	}
+
+	return fn, nil
 }
