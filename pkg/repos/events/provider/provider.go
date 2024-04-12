@@ -2,21 +2,21 @@ package provider
 
 import (
 	"grid/pkg/env"
-	"grid/pkg/models"
+	"grid/pkg/model"
 )
 
-type Provider interface {
-	Append(key string, v *models.LocationEvent) error
-	AppendDLQ(key string, v *models.LocationEvent) error
+type Provider[V model.Implementer] interface {
+	Append(key string, v *V) error
+	// AppendDLQ(key string, v *V) error
 	Del(key string) error
 	DelAtIndex(key string, index int64) error
 	DelHead(key string) error
 	DelTail(key string) error
-	Get(key string) ([]*models.LocationEvent, error)
-	GetAtIndex(key string, index int64) (*models.LocationEvent, error)
-	GetHead(key string) (*models.LocationEvent, error)
-	GetTail(key string) (*models.LocationEvent, error)
-	// Set(key string, l []*models.LocationEvent) error
+	Get(key string) ([]*V, error)
+	GetAtIndex(key string, index int64) (*V, error)
+	GetHead(key string) (*V, error)
+	GetTail(key string) (*V, error)
+	// Set(key string, l []*V) error
 
-	Initialize(vars *env.Vars) (Provider, error)
+	Initialize(vars *env.Vars) error
 }
