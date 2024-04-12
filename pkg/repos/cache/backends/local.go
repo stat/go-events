@@ -5,37 +5,63 @@ import (
 	"sync"
 
 	"grid/pkg/env"
-	"grid/pkg/models"
-	"grid/pkg/repos/cache/provider"
+	"grid/pkg/model"
 )
 
-type Local struct {
-	// AircraftsLocations map[string]*models.LocationEvent
-	AircraftsLocations *sync.Map
+type Local[V model.Implementer] struct {
+	// Data map[string]*models.LocationEvent
+	Data *sync.Map
 }
 
 var (
+	// Local = provider.Type("local")
+
 	LocalCacheKeyNotFoundError      = errors.New("Local cache could not find key")
 	LocalCacheKeyValueCoersionError = errors.New("Local cache could not cast value")
 )
 
-func (backend Local) Initialize(vars *env.Vars) (provider.Provider, error) {
-	concrete := Local{
-		// AircraftsLocations: map[string]*models.LocationEvent{},
-		AircraftsLocations: &sync.Map{},
-	}
+// func InitializeLocal[T provider.Implementer[V], V model.Implementer](vars *env.Vars) (provider.Implementer[V], error) {
 
-	return concrete, nil
+//   return nil, nil
+// }
+
+// func (backend Local) Initialize(vars *env.Vars) (provider.Implementer, error) {
+func (backend *Local[V]) Initialize(vars *env.Vars) error {
+	// concrete := Local{
+	//   // AircraftsLocations: map[string]*models.LocationEvent{},
+	//   Latests: &sync.Map{},
+	// }
+
+	backend.Data = &sync.Map{}
+
+	return nil
 }
 
-func (backend Local) GetAircraftLocation(key string) (*models.LocationEvent, error) {
-	iface, ok := backend.AircraftsLocations.Load(key)
+func (backend *Local[V]) GetLatest(key string) (*V, error) {
+	iface, ok := backend.Data.Load(key)
 
 	if !ok {
 		return nil, LocalCacheKeyNotFoundError
 	}
 
-	location, ok := iface.(*models.LocationEvent)
+	event, ok := iface.(*V)
+
+	if !ok {
+		return nil, LocalCacheKeyValueCoersionError
+	}
+
+	return event, nil
+	// return iface, nil
+}
+
+func (backend *Local[V]) GetAircraftLocation(key string) (*V, error) {
+	iface, ok := backend.Data.Load(key)
+
+	if !ok {
+		return nil, LocalCacheKeyNotFoundError
+	}
+
+	location, ok := iface.(*V)
 
 	if !ok {
 		return nil, LocalCacheKeyValueCoersionError
@@ -44,14 +70,15 @@ func (backend Local) GetAircraftLocation(key string) (*models.LocationEvent, err
 	return location, nil
 }
 
-func (backend Local) GetAircraftsLocations() (map[string]*models.LocationEvent, error) {
+func (backend *Local[V]) GetAircraftsLocations() (map[string]*V, error) {
 	// TODO: implement or remove me
 	return nil, nil
 }
 
-func (backend Local) UpsertAircraftLocation(key string, v *models.LocationEvent) error {
+func (backend *Local[V]) UpsertAircraftLocation(key string, v *V) error {
 	// backend.AircraftsLocations[key] = v
 
-	backend.AircraftsLocations.Store(key, v)
+	backend.Data.Store(key, v)
+
 	return nil
 }
