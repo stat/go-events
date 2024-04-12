@@ -2,6 +2,7 @@ package main
 
 import (
 	"grid/app"
+	"grid/pkg/env"
 	"log"
 	"os"
 	"os/signal"
@@ -9,7 +10,17 @@ import (
 )
 
 func main() {
-	vars, err := app.Initialize()
+	// vars
+
+	vars, err := env.Load()
+
+	if err != nil {
+		panic(err)
+	}
+
+	// initialize
+
+	err = app.Initialize(vars)
 
 	if err != nil {
 		panic(err)
