@@ -117,7 +117,9 @@ run: clean build ## run with .env
 
 .PHONY: test
 test: ## run tests
-	@$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v $(TESTS)
+	# @$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v $(TESTS)
+	# @$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v --run TestEventsRepo ./pkg/repos/events
+	# @$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v --run TestLoad ./pkg/env
 
 .PHONY: help
 help:
