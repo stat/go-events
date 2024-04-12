@@ -1,21 +1,27 @@
 package app
 
 import (
-	_ "grid/pkg/db/postgres"
-
+	"grid/config"
 	"grid/pkg/db/queue"
 	"grid/pkg/env"
 	"grid/pkg/lifecycle"
 	"grid/pkg/repos/cache"
 	"grid/pkg/repos/events"
-	"grid/pkg/tasks"
 	"grid/pkg/transport/http/server"
 	"grid/pkg/transport/ws/socket"
+	"grid/pkg/utils"
 	"grid/workers"
+
+	// "grid/pkg/db/postgres"
 
 	cache_backends "grid/pkg/repos/cache/backends"
 	events_backends "grid/pkg/repos/events/backends"
 )
+
+// TODO: move type aliases into config
+
+// TODO: scope these vars
+// TODO: think about how to implement multiple streams
 
 var (
 	Initializers = lifecycle.Fns[env.Vars]{
@@ -26,36 +32,88 @@ var (
 
 		// repos
 
-		cache.Initialize[cache_backends.Redis],
-		events.Initialize[events_backends.Redis],
+		// cache.InitializeFn(
+		//   &cache_backends.Local{},
+		//   &models.LocationEvent{},
+		// ),
+
+		// events.InitializeFn(&events.Options{
+		//   Provider: events_backends.LocalType,
+		// }),
+
+		// utils.Must(
+		//   events.InitializeFn(&events.Options{
+		//     Backend: &events_backends.Local[models.LocationEvent]{},
+		//   }),
+		// ),
+
+		// events.Initialize[events_backends.Local[models.LocationEvent]],
+		// utils.Must(
+		//   events.InitializeFn(EventsOptions),
+		//   // events.InitializeFn(
+		//   //   &backends.Local[models.LocationEvent]{},
+		//   // ),
+		// ),
+
+		utils.Must(
+			Cache.InitializeFn(CacheOptions),
+		),
+
+		utils.Must(
+			Events.InitializeFn(EventsOptions),
+		),
+
+		// events.Backend.InitializeFnWithOptions(events.Options{
+		//   KeyFn: func(event *models.LocationEvent) (key string, err error) {
+		//     return "", nil
+		//   },
+		// }),
 
 		// transport
 
 		server.Initialize,
-		socket.Initialize,
 
-		// asynq task registry
-
-		tasks.Initialize,
+		utils.Must(
+			Socket.InitializeFn(SocketOptions),
+		),
 
 		// asynq server
 
-		workers.Initialize,
+		// workers.Initialize,
+		utils.Must(
+			Workers.InitializeFn(WorkersOptions),
+		),
+	}
+
+	Events        = &events.Repo[config.EventModel]{}
+	EventsOptions = &events.Options[config.EventModel]{
+		Backend: &events_backends.Redis[config.EventModel]{},
+	}
+
+	Cache        = &cache.Repo[config.CacheModel]{}
+	CacheOptions = &cache.Options[config.CacheModel]{
+		Backend: &cache_backends.Redis[config.CacheModel]{},
+	}
+
+	// ServerOptions = &server.Options{}
+	Socket        = &socket.Server[config.CacheModel]{}
+	SocketOptions = &socket.Options[config.CacheModel]{
+		Cache: Cache,
+	}
+
+	Workers        = &workers.Server[config.CacheModel, config.EventModel]{}
+	WorkersOptions = &workers.Options[config.CacheModel, config.EventModel]{
+		Cache:  Cache,
+		Events: Events,
 	}
 )
 
-func Initialize() (*env.Vars, error) {
-	// load env
-
-	vars, err := env.Load()
+func Initialize(vars *env.Vars) error {
+	err := Initializers.Execute(vars)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return vars, InitializeWithVars(vars)
-}
-
-func InitializeWithVars(vars *env.Vars) error {
-	return Initializers.Execute(vars)
+	return nil
 }
