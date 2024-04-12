@@ -1,5 +1,5 @@
 #!/bin/sh
 
-while inotifywait -qqre modify ./pkg; do
+while inotifywait -qqre modify ./app ./pkg; do
   make test
 done
