@@ -10,7 +10,17 @@ var (
 )
 
 func init() {
-	vars, err := app.Initialize()
+	// vars
+
+	vars, err := env.Load()
+
+	if err != nil {
+		panic(err)
+	}
+
+	// initialize
+
+	err = app.Initialize(vars)
 
 	if err != nil {
 		panic(err)
