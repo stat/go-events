@@ -1,4 +1,4 @@
-package events_backends
+package backends
 
 import (
 	"context"
@@ -7,12 +7,11 @@ import (
 
 	"grid/pkg/db/redis"
 	"grid/pkg/env"
-	"grid/pkg/models"
-	"grid/pkg/repos/events/provider"
+	"grid/pkg/model"
 	"grid/pkg/utils"
 )
 
-type Redis struct {
+type Redis[V model.Implementer] struct {
 	*redis.Client
 }
 
@@ -21,23 +20,23 @@ const (
 	RedisDLQIndex  = "dlq-index"
 )
 
-func (backend Redis) Initialize(vars *env.Vars) (provider.Provider, error) {
+func (backend *Redis[V]) Initialize(vars *env.Vars) error {
 	args := *vars
 	args.RedisDB = vars.RedisDBEvents
 
-	concrete := Redis{}
+	// concrete := *Redis[V]{}
 	client, err := redis.NewWithEnv(utils.Ref(args))
 
 	if err != nil {
-		return Redis{}, err
+		return err
 	}
 
-	concrete.Client = client
+	backend.Client = client
 
-	return concrete, nil
+	return nil
 }
 
-func (backend Redis) Append(key string, v *models.LocationEvent) error {
+func (backend *Redis[V]) Append(key string, v *V) error {
 	marshalled, err := json.Marshal(v)
 
 	if err != nil {
@@ -49,7 +48,7 @@ func (backend Redis) Append(key string, v *models.LocationEvent) error {
 	return cmd.Err()
 }
 
-func (backend Redis) AppendDLQ(key string, v *models.LocationEvent) error {
+func (backend *Redis[V]) AppendDLQ(key string, v *V) error {
 	// write to DLQ
 
 	dlqKey := fmt.Sprintf("%s%s", key, RedisDLQSuffix)
@@ -69,33 +68,33 @@ func (backend Redis) AppendDLQ(key string, v *models.LocationEvent) error {
 	return nil
 }
 
-func (backend Redis) Del(key string) error {
+func (backend *Redis[V]) Del(key string) error {
 	// TODO: implement or remove me
 	return nil
 }
 
-func (backend Redis) DelAtIndex(key string, index int64) error {
+func (backend *Redis[V]) DelAtIndex(key string, index int64) error {
 	// TODO: implement or remove me
 	return nil
 }
 
-func (backend Redis) DelHead(key string) error {
+func (backend *Redis[V]) DelHead(key string) error {
 	cmd := backend.LPop(context.Background(), key)
 
 	return cmd.Err()
 }
 
-func (backend Redis) DelTail(key string) error {
+func (backend *Redis[V]) DelTail(key string) error {
 	// TODO: implement or remove me
 	return nil
 }
 
-func (backend Redis) Get(key string) ([]*models.LocationEvent, error) {
+func (backend *Redis[V]) Get(key string) ([]*V, error) {
 	// TODO: implement or remove me
 	return nil, nil
 }
 
-func (backend Redis) GetAtIndex(key string, index int64) (*models.LocationEvent, error) {
+func (backend *Redis[V]) GetAtIndex(key string, index int64) (*V, error) {
 	cmd := backend.LIndex(context.Background(), key, index)
 
 	if err := cmd.Err(); err != nil {
@@ -104,8 +103,9 @@ func (backend Redis) GetAtIndex(key string, index int64) (*models.LocationEvent,
 
 	// unmarshal
 
-	event := &models.LocationEvent{}
-	err := json.Unmarshal([]byte(cmd.Val()), event)
+	var event V
+
+	err := json.Unmarshal([]byte(cmd.Val()), &event)
 
 	// delete event if mangled
 
@@ -115,14 +115,14 @@ func (backend Redis) GetAtIndex(key string, index int64) (*models.LocationEvent,
 
 	// success
 
-	return event, err
+	return &event, err
 }
 
-func (backend Redis) GetHead(key string) (*models.LocationEvent, error) {
+func (backend *Redis[V]) GetHead(key string) (*V, error) {
 	return backend.GetAtIndex(key, 0)
 }
 
-func (backend Redis) GetTail(key string) (*models.LocationEvent, error) {
+func (backend *Redis[V]) GetTail(key string) (*V, error) {
 	return backend.GetAtIndex(key, -1)
 }
 
