@@ -3,7 +3,7 @@ package aircrafts
 import (
 	"net/http"
 
-	"grid/pkg/repos/cache"
+	"grid/pkg/models"
 	"grid/pkg/transport/http/respond"
 
 	"github.com/gin-gonic/gin"
@@ -19,12 +19,14 @@ func Get(c *gin.Context) {
 
 	// lookup
 
-	location, err := cache.Backend.GetAircraftLocation(uriParams.AircraftID)
+	location := &models.LocationEvent{}
 
-	if err != nil {
-		respond.WithError(c, http.StatusNotFound, err)
-		return
-	}
+	// location, err := cache.Backend.GetAircraftLocation(uriParams.AircraftID)
+
+	// if err != nil {
+	//   respond.WithError(c, http.StatusNotFound, err)
+	//   return
+	// }
 
 	// success
 
