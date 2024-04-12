@@ -24,6 +24,10 @@ var (
 	ADSBValidateTimestampError  = errors.New("Location event timestamp validation error")
 )
 
+func (event LocationEvent) Key() (string, error) {
+	return "", nil
+}
+
 func (event *LocationEvent) Validate() error {
 	if event.AircraftID == "" {
 		return ADSBValidateAircraftIDError
