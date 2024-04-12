@@ -3,9 +3,9 @@ package producer
 import (
 	"context"
 	"encoding/json"
+
+	// "grid/config"
 	"grid/pkg/models"
-	"grid/pkg/repos/cache"
-	"grid/pkg/repos/events"
 
 	"github.com/hibiken/asynq"
 )
@@ -19,33 +19,35 @@ const (
 )
 
 func Process(event *models.LocationEvent) error {
-	// key
+	// // key
 
-	key := event.AircraftID
+	// key := event.AircraftID
 
-	// marshal
+	// // marshal
 
-	// eventJSON, err := json.Marshal(event)
+	// // eventJSON, err := json.Marshal(event)
+
+	// // if err != nil {
+	// //   return err
+	// // }
+
+	// // add event to airplaneID
+
+	// // err := events.Backend.Append(key, event)
+	// err := config.Events.Append(key, event)
 
 	// if err != nil {
 	//   return err
 	// }
 
-	// add event to airplaneID
+	// // update cache
 
-	err := events.Backend.Append(key, event)
+	// // err = cache.Backend.UpsertAircraftLocation(key, event)
+	// err = config.Cache.UpsertAircraftLocation(key, event)
 
-	if err != nil {
-		return err
-	}
-
-	// update cache
-
-	err = cache.Backend.UpsertAircraftLocation(key, event)
-
-	if err != nil {
-		return err
-	}
+	// if err != nil {
+	//   return err
+	// }
 
 	return nil
 }
