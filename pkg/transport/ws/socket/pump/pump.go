@@ -4,13 +4,14 @@ import (
 	"encoding/json"
 	"time"
 
+	"grid/pkg/model"
 	"grid/pkg/repos/cache/provider"
 
 	"github.com/olahol/melody"
 )
 
-type Pump struct {
-	Cache  provider.Provider
+type Pump[V model.Implementer] struct {
+	Cache  provider.Implementer[V]
 	Socket *melody.Melody
 	Ticker *time.Ticker
 
@@ -34,14 +35,14 @@ var (
 	}
 )
 
-func New(socket *melody.Melody, cache provider.Provider) (*Pump, error) {
+func New[V model.Implementer](socket *melody.Melody, cache provider.Implementer[V]) (*Pump[V], error) {
 	return NewWithOptions(socket, cache, DefaultOptions)
 }
 
-func NewWithOptions(socket *melody.Melody, cache provider.Provider, options *PumpOptions) (*Pump, error) {
+func NewWithOptions[V model.Implementer](socket *melody.Melody, cache provider.Implementer[V], options *PumpOptions) (*Pump[V], error) {
 	ticker := time.NewTicker(options.Interval)
 
-	pump := &Pump{
+	pump := &Pump[V]{
 		Cache:  cache,
 		Socket: socket,
 		Ticker: ticker,
@@ -51,7 +52,7 @@ func NewWithOptions(socket *melody.Melody, cache provider.Provider, options *Pum
 	return pump, nil
 }
 
-func (publisher *Pump) Publish() error {
+func (publisher *Pump[V]) Publish() error {
 	data, err := publisher.Cache.GetAircraftsLocations()
 
 	if err != nil {
@@ -73,7 +74,7 @@ func (publisher *Pump) Publish() error {
 	return nil
 }
 
-func (publisher *Pump) Start() error {
+func (publisher *Pump[V]) Start() error {
 	go func() {
 		for {
 			select {
@@ -88,7 +89,7 @@ func (publisher *Pump) Start() error {
 	return nil
 }
 
-func (publisher *Pump) Stop() error {
+func (publisher *Pump[V]) Stop() error {
 	publisher.Done <- true
 	return nil
 }
