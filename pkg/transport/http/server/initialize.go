@@ -3,6 +3,7 @@ package server
 import (
 	"errors"
 	"fmt"
+
 	"grid/pkg/env"
 	"grid/pkg/lifecycle"
 	"grid/pkg/transport/http/middleware/cors"
