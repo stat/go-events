@@ -20,7 +20,7 @@ import (
 
 // TODO: move type aliases into config
 
-// TODO: scope these vars
+// TODO: scope these vars to Stream
 // TODO: think about how to implement multiple streams
 
 var (
