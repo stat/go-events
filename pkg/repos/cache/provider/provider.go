@@ -1,8 +1,8 @@
 package provider
 
 import (
-	"grid/pkg/env"
-	"grid/pkg/model"
+	"events/pkg/env"
+	"events/pkg/model"
 )
 
 // type Initializer = func[V any]

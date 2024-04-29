@@ -3,12 +3,12 @@ package workers
 import (
 	"fmt"
 
-	"grid/pkg/env"
-	"grid/pkg/model"
-	"grid/pkg/repos/cache"
-	"grid/pkg/repos/events"
-	"grid/pkg/tasks/consumer"
-	"grid/pkg/tasks/producer"
+	"events/pkg/env"
+	"events/pkg/model"
+	"events/pkg/repos/cache"
+	"events/pkg/repos/events"
+	"events/pkg/tasks/consumer"
+	"events/pkg/tasks/producer"
 
 	"github.com/hibiken/asynq"
 	"github.com/jinzhu/copier"

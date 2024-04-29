@@ -4,11 +4,11 @@ import (
 	"errors"
 	"fmt"
 
-	"grid/pkg/env"
-	"grid/pkg/lifecycle"
-	"grid/pkg/transport/http/middleware/cors"
-	"grid/pkg/transport/http/routes"
-	"grid/pkg/transport/http/validator"
+	"events/pkg/env"
+	"events/pkg/lifecycle"
+	"events/pkg/transport/http/middleware/cors"
+	"events/pkg/transport/http/routes"
+	"events/pkg/transport/http/validator"
 
 	"github.com/gin-gonic/gin"
 )

@@ -8,11 +8,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"grid/pkg/models"
-	events_backends "grid/pkg/repos/events/backends"
-	"grid/pkg/utils"
+	"events/pkg/models"
+	events_backends "events/pkg/repos/events/backends"
+	"events/pkg/utils"
 
-	_ "grid/testing"
+	_ "events/testing"
 )
 
 func TestLocal(t *testing.T) {

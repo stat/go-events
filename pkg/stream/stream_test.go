@@ -1,7 +1,7 @@
 package stream_test
 
 import (
-	"grid/pkg/env"
+	"events/pkg/env"
 	"testing"
 
 	"github.com/stretchr/testify/require"

@@ -1,8 +1,8 @@
 package socket
 
 import (
-	"grid/pkg/model"
-	"grid/pkg/repos/cache"
+	"events/pkg/model"
+	"events/pkg/repos/cache"
 )
 
 type Options[V model.Implementer] struct {

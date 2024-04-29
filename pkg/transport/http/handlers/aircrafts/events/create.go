@@ -1,12 +1,12 @@
 package aircrafts_events
 
 import (
-	"grid/pkg/models"
+	"events/pkg/models"
 	"net/http"
 
-	"grid/pkg/db/queue"
-	"grid/pkg/tasks/consumer"
-	"grid/pkg/transport/http/respond"
+	"events/pkg/db/queue"
+	"events/pkg/tasks/consumer"
+	"events/pkg/transport/http/respond"
 
 	"github.com/gin-gonic/gin"
 )

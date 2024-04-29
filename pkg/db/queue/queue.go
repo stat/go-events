@@ -2,8 +2,8 @@ package queue
 
 import (
 	"errors"
+	"events/pkg/env"
 	"fmt"
-	"grid/pkg/env"
 
 	"github.com/hibiken/asynq"
 	"github.com/jinzhu/copier"

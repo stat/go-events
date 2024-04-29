@@ -1,8 +1,8 @@
 package tasks
 
 import (
-	"grid/pkg/db/redis"
-	"grid/pkg/env"
+	"events/pkg/db/redis"
+	"events/pkg/env"
 
 	"github.com/jinzhu/copier"
 )

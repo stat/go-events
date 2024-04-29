@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"grid/pkg/models"
-	"grid/pkg/repos/cache"
-	"grid/pkg/transport/http/server"
-	"grid/pkg/utils"
+	"events/pkg/models"
+	"events/pkg/repos/cache"
+	"events/pkg/transport/http/server"
+	"events/pkg/utils"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"

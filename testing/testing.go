@@ -1,8 +1,8 @@
 package testing
 
 import (
-	"grid/app"
-	"grid/pkg/env"
+	"events/app"
+	"events/pkg/env"
 )
 
 var (

@@ -7,11 +7,11 @@ import (
 
 	// "time"
 
-	"grid/pkg/db/queue"
-	"grid/pkg/models"
-	"grid/pkg/tasks/producer"
+	"events/pkg/db/queue"
+	"events/pkg/models"
+	"events/pkg/tasks/producer"
 
-	// "grid/pkg/tasks/producer"
+	// "events/pkg/tasks/producer"
 
 	"github.com/hibiken/asynq"
 )

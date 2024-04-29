@@ -2,14 +2,14 @@ package events
 
 import (
 	"errors"
-	"grid/pkg/env"
-	"grid/pkg/model"
+	"events/pkg/env"
+	"events/pkg/model"
 
-	// "grid/pkg/repo/backend"
+	// "events/pkg/repo/backend"
 
-	// "grid/pkg/repos/events/backend"
-	"grid/pkg/repos/events/backends"
-	"grid/pkg/repos/events/provider"
+	// "events/pkg/repos/events/backend"
+	"events/pkg/repos/events/backends"
+	"events/pkg/repos/events/provider"
 )
 
 type Repo[V model.Implementer] struct {

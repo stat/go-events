@@ -2,10 +2,10 @@ package cache
 
 import (
 	"errors"
-	"grid/pkg/env"
-	"grid/pkg/model"
-	"grid/pkg/repos/cache/backends"
-	"grid/pkg/repos/cache/provider"
+	"events/pkg/env"
+	"events/pkg/model"
+	"events/pkg/repos/cache/backends"
+	"events/pkg/repos/cache/provider"
 )
 
 // type Item[V any] struct {

@@ -1,4 +1,4 @@
-module grid
+module events
 
 go 1.22
 

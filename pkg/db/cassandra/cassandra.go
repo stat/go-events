@@ -1,7 +1,7 @@
 package cassandra
 
 import (
-	"grid/pkg/env"
+	"events/pkg/env"
 )
 
 type Client struct {

@@ -2,8 +2,8 @@ package redis
 
 import (
 	"context"
+	"events/pkg/env"
 	"fmt"
-	"grid/pkg/env"
 
 	"github.com/jinzhu/copier"
 	v9 "github.com/redis/go-redis/v9"

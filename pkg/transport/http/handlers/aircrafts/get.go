@@ -3,8 +3,8 @@ package aircrafts
 import (
 	"net/http"
 
-	"grid/pkg/models"
-	"grid/pkg/transport/http/respond"
+	"events/pkg/models"
+	"events/pkg/transport/http/respond"
 
 	"github.com/gin-gonic/gin"
 )

@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"grid/pkg/db/redis"
-	"grid/pkg/env"
-	"grid/pkg/model"
-	"grid/pkg/utils"
+	"events/pkg/db/redis"
+	"events/pkg/env"
+	"events/pkg/model"
+	"events/pkg/utils"
 )
 
 type Redis[V model.Implementer] struct {

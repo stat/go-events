@@ -1,8 +1,8 @@
 package app
 
 import (
-	"grid/pkg/env"
-	"grid/pkg/lifecycle"
+	"events/pkg/env"
+	"events/pkg/lifecycle"
 )
 
 var (

@@ -1,7 +1,7 @@
 package config
 
 import (
-	"grid/pkg/models"
+	"events/pkg/models"
 )
 
 // type Config struct { }

@@ -1,21 +1,21 @@
 package app
 
 import (
-	"grid/config"
-	"grid/pkg/db/queue"
-	"grid/pkg/env"
-	"grid/pkg/lifecycle"
-	"grid/pkg/repos/cache"
-	"grid/pkg/repos/events"
-	"grid/pkg/transport/http/server"
-	"grid/pkg/transport/ws/socket"
-	"grid/pkg/utils"
-	"grid/workers"
+	"events/config"
+	"events/pkg/db/queue"
+	"events/pkg/env"
+	"events/pkg/lifecycle"
+	"events/pkg/repos/cache"
+	"events/pkg/repos/events"
+	"events/pkg/transport/http/server"
+	"events/pkg/transport/ws/socket"
+	"events/pkg/utils"
+	"events/workers"
 
-	// "grid/pkg/db/postgres"
+	// "events/pkg/db/postgres"
 
-	cache_backends "grid/pkg/repos/cache/backends"
-	events_backends "grid/pkg/repos/events/backends"
+	cache_backends "events/pkg/repos/cache/backends"
+	events_backends "events/pkg/repos/events/backends"
 )
 
 // TODO: move type aliases into config

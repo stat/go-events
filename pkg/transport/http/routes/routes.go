@@ -1,8 +1,8 @@
 package routes
 
 import (
-	aircrafts "grid/pkg/transport/http/handlers/aircrafts"
-	aircrafts_events "grid/pkg/transport/http/handlers/aircrafts/events"
+	aircrafts "events/pkg/transport/http/handlers/aircrafts"
+	aircrafts_events "events/pkg/transport/http/handlers/aircrafts/events"
 
 	"github.com/gin-gonic/gin"
 )

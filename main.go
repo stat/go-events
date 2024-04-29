@@ -1,8 +1,8 @@
 package main
 
 import (
-	"grid/app"
-	"grid/pkg/env"
+	"events/app"
+	"events/pkg/env"
 	"log"
 	"os"
 	"os/signal"

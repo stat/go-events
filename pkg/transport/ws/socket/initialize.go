@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"grid/pkg/env"
-	"grid/pkg/model"
-	"grid/pkg/transport/ws/socket/pump"
+	"events/pkg/env"
+	"events/pkg/model"
+	"events/pkg/transport/ws/socket/pump"
 
 	"github.com/olahol/melody"
 )

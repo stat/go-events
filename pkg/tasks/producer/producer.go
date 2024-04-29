@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	// "grid/config"
-	"grid/pkg/models"
+	// "events/config"
+	"events/pkg/models"
 
 	"github.com/hibiken/asynq"
 )

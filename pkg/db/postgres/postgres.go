@@ -1,8 +1,8 @@
 package postgres
 
 import (
+	"events/pkg/env"
 	"fmt"
-	"grid/pkg/env"
 
 	"github.com/jinzhu/copier"
 	"gorm.io/gorm"

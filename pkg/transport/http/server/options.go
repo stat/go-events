@@ -1,7 +1,7 @@
 package server
 
 import (
-	"grid/pkg/model"
+	"events/pkg/model"
 )
 
 type Options[V model.Implementer] struct {

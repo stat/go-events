@@ -3,14 +3,14 @@ package events_test
 import (
 	"testing"
 
-	"grid/pkg/env"
-	"grid/pkg/models"
-	"grid/pkg/repos/events/backends"
+	"events/pkg/env"
+	"events/pkg/models"
+	"events/pkg/repos/events/backends"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 
-	_ "grid/testing"
+	_ "events/testing"
 )
 
 func TestEventsRepo(t *testing.T) {

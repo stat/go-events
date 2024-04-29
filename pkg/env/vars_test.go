@@ -3,7 +3,7 @@ package env_test
 import (
 	"testing"
 
-	"grid/pkg/env"
+	"events/pkg/env"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

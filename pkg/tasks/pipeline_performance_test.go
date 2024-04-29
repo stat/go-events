@@ -8,14 +8,14 @@ import (
 	"testing"
 	"time"
 
-	"grid/pkg/models"
-	"grid/pkg/tasks/consumer"
-	"grid/pkg/tasks/producer"
-	"grid/pkg/utils"
+	"events/pkg/models"
+	"events/pkg/tasks/consumer"
+	"events/pkg/tasks/producer"
+	"events/pkg/utils"
 
 	"github.com/stretchr/testify/assert"
 
-	_ "grid/testing"
+	_ "events/testing"
 )
 
 // TODO: refactor me

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"sync"
 
-	"grid/pkg/env"
-	"grid/pkg/model"
+	"events/pkg/env"
+	"events/pkg/model"
 )
 
 type Local[V model.Implementer] struct {

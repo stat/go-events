@@ -1,7 +1,7 @@
 package respond
 
 import (
-	"grid/pkg/utils"
+	"events/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 )

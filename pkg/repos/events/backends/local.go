@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sync"
 
-	"grid/pkg/env"
-	"grid/pkg/model"
+	"events/pkg/env"
+	"events/pkg/model"
 	//"github.com/hashicorp/go-set/v2"
 )
 

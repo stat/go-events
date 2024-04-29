@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"grid/pkg/model"
-	"grid/pkg/repos/cache/provider"
+	"events/pkg/model"
+	"events/pkg/repos/cache/provider"
 
 	"github.com/olahol/melody"
 )

@@ -1,7 +1,7 @@
 package server
 
 import (
-	"grid/pkg/env"
+	"events/pkg/env"
 )
 
 func Terminate(env *env.Vars) error {
