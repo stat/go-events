@@ -60,7 +60,7 @@ var (
 		),
 
 		utils.Must(
-			Events.InitializeFn(EventsOptions),
+			Index.InitializeFn(IndexOptions),
 		),
 
 		// events.Backend.InitializeFnWithOptions(events.Options{
@@ -85,8 +85,8 @@ var (
 		),
 	}
 
-	Events        = &events.Repo[config.EventModel]{}
-	EventsOptions = &events.Options[config.EventModel]{
+	Index        = &events.Repo[config.EventModel]{}
+	IndexOptions = &events.Options[config.EventModel]{
 		Backend: &events_backends.Redis[config.EventModel]{},
 	}
 
@@ -104,16 +104,21 @@ var (
 	Workers        = &workers.Server[config.CacheModel, config.EventModel]{}
 	WorkersOptions = &workers.Options[config.CacheModel, config.EventModel]{
 		Cache:  Cache,
-		Events: Events,
+		Events: Index,
 	}
 )
 
-func Initialize(vars *env.Vars) error {
-	err := Initializers.Execute(vars)
+// func Initialize(vars *env.Vars) error {
+//   err := Initializers.Execute(vars)
 
-	if err != nil {
-		return err
-	}
+//   if err != nil {
+//     return err
+//   }
+
+//   return nil
+// }
+
+func Initialize(vars *env.Vars) error {
 
 	return nil
 }
